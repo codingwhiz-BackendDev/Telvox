@@ -1,0 +1,90 @@
+{% extends 'dashboard_base.html' %}
+{% load dashboard_filters %}
+
+{% block title %}Phone Numbers - Telvox Dashboard{% endblock %}
+
+{% block content %}
+<div class="phone-numbers-container">
+    <div class="phone-numbers-header">
+        <h1>Your Phone Numbers</h1>
+        <button class="btn-primary" id="openGetNumberModal">Get a Number</button>
+    </div>
+
+    {% if virtual_numbers %}
+        <div class="numbers-grid">
+            {% for number in virtual_numbers %}
+                <div class="number-card">
+                    <div class="number-flag">{{ number.country|country_flag }}</div>
+                    <div class="number-country">{{ number.country }}</div>
+                    <div class="number-phone">{{ number.phone_number }}</div>
+                    <span class="status-badge {% if number.status == 'active' %}status-active{% else %}status-suspended{% endif %}">{{ number.status|title }}</span>
+                    <div class="number-renewal">Renews: {{ number.renewal_date|date:"M d, Y" }}</div>
+                    <div class="number-actions">
+                        <button class="btn-manage">Manage</button>
+                        <button class="btn-cancel">Cancel</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <svg width="96" height="96" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <h3>No phone numbers yet</h3>
+            <p>Get a virtual number to start making calls and sending SMS.</p>
+            <button class="btn-primary" id="openGetNumberModalFromEmpty">Get a Number</button>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Get Number Modal -->
+<div class="get-number-modal" id="getNumberModal">
+    <div class="get-number-modal-content">
+        <button class="get-number-modal-close" id="closeGetNumberModal">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        
+        <h2>Get a Phone Number</h2>
+        <p>Choose a country and select your preferred number</p>
+        
+        <div class="get-number-form">
+            <div class="form-group">
+                <label>Select Country</label>
+                <select id="countrySelect" class="country-select">
+                    <option value="">Choose a country</option>
+                    <option value="US">🇺🇸 United States</option>
+                    <option value="UK">🇬🇧 United Kingdom</option>
+                    <option value="CA">🇨🇦 Canada</option>
+                    <option value="AU">🇦🇺 Australia</option>
+                    <option value="DE">🇩🇪 Germany</option>
+                    <option value="FR">🇫🇷 France</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Select Number</label>
+                <div class="available-numbers" id="availableNumbers">
+                    <div class="number-option">
+                        <span class="number-display">+1 (555) 123-4567</span>
+                        <button class="btn-select-number">Select</button>
+                    </div>
+                    <div class="number-option">
+                        <span class="number-display">+1 (555) 234-5678</span>
+                        <button class="btn-select-number">Select</button>
+                    </div>
+                    <div class="number-option">
+                        <span class="number-display">+1 (555) 345-6789</span>
+                        <button class="btn-select-number">Select</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="selected-number-summary" id="selectedNumberSummary" style="display: none;">
+                <p>Selected Number: <strong id="selectedNumberDisplay"></strong></p>
+                <p>Monthly Cost: <strong>$5.00</strong></p>
+            </div>
+            
+            <button class="btn-primary btn-large" id="confirmGetNumber" disabled>Confirm Purchase</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

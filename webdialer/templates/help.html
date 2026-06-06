@@ -1,0 +1,69 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Help - Telvox Dashboard{% endblock %}
+
+{% block content %}
+<div class="help-container">
+    <h1>Help & FAQs</h1>
+
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-question">
+                <span>What is a virtual number?</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>A virtual number is a phone number that isn't tied to a physical phone line or SIM card. It works over the internet (VoIP) and allows you to make and receive calls, send SMS messages, and maintain privacy without needing a physical device. You can get virtual numbers from different countries to establish a local presence anywhere in the world.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                <span>How do I make calls?</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>To make a call, simply use our web dialer or mobile app. Select your virtual number, enter the destination number, and click the call button. Calls are made over the internet using VoIP technology, ensuring HD voice quality. You can also use your virtual number with SIP-compatible softphones or hardware phones.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                <span>How does SMS work?</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>SMS works through our web dashboard or mobile app. You can send text messages to any phone number worldwide using your virtual number. Incoming SMS to your virtual number are received in your inbox and are always free. Outgoing SMS are charged per message based on the destination country. All messages are stored in your conversation history.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                <span>How does billing work?</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>Billing is based on a prepaid credit system. You purchase credits which are used for calls and SMS. Each virtual number has a monthly subscription fee. Call charges depend on the destination country and duration. SMS charges vary by destination. You can view your balance, transaction history, and top up credits anytime from the Account section.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                <span>How do I cancel a number?</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>To cancel a virtual number, go to the Phone Numbers section, find the number you want to cancel, and click the Cancel button. You'll be asked to confirm the cancellation. Once cancelled, the number will be released and you'll stop being charged the monthly fee. Note that cancelled numbers cannot be recovered.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-support">
+        <div class="support-card">
+            <h3>Still need help?</h3>
+            <p>Contact our support team for assistance.</p>
+            <a href="mailto:support@telvox.com" class="btn-primary">Contact Support</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
