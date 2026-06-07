@@ -5,10 +5,39 @@ from django.core.paginator import Paginator
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import cache
+from decimal import Decimal
 import requests
 import json
 from App.models import UserProfile, VirtualNumber, Message, CallLog, CreditTransaction
 from django.db.models import Q
+
+def get_usd_to_naira_rate():
+    """
+    Fetch current USD to NGN exchange rate from API.
+    Caches the rate for 1 hour to avoid excessive API calls.
+    Falls back to a default rate if API fails.
+    """
+    # Try to get cached rate first
+    cached_rate = cache.get('usd_to_naira_rate')
+    if cached_rate:
+        return cached_rate
+    
+    try:
+        # Use a free exchange rate API
+        response = requests.get('https://api.exchangerate-api.com/v4/latest/USD', timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            rate = data.get('rates', {}).get('NGN', 1360)  # Default to 1360 if NGN not found
+            
+            # Cache the rate for 1 hour (3600 seconds)
+            cache.set('usd_to_naira_rate', rate, 3600)
+            return rate
+    except Exception as e:
+        print(f"Error fetching exchange rate: {e}")
+    
+    # Fallback to default rate if API fails
+    return 1360
 
 @login_required
 def sms_view(request):
@@ -190,8 +219,15 @@ def initialize_payment(request):
         bonus = float(request.POST.get('bonus', 0))
         email = user.email
         
-        if amount <= 0:
-            return JsonResponse({'error': 'Invalid amount'}, status=400)
+        if amount < 5:
+            return JsonResponse({'error': 'Minimum amount is $5'}, status=400)
+        
+        if not settings.PAYSTACK_SECRET_KEY:
+            return JsonResponse({'error': 'Paystack secret key not configured. Please add PAYSTACK_SECRET_KEY to your .env file.'}, status=500)
+        
+        # Get current USD to Naira exchange rate
+        usd_to_naira_rate = get_usd_to_naira_rate()
+        amount_in_naira = amount * usd_to_naira_rate
         
         total_credits = amount + bonus
         
@@ -203,7 +239,7 @@ def initialize_payment(request):
         }
         data = {
             'email': email,
-            'amount': int(amount * 100),  # Paystack expects amount in kobo (cents)
+            'amount': int(amount_in_naira * 100),  # Paystack expects amount in kobo (cents)
             'callback_url': settings.PAYSTACK_CALLBACK_URL,
             'metadata': {
                 'user_id': user.id,
@@ -252,9 +288,9 @@ def verify_payment(request):
                 # Payment successful, update user balance
                 metadata = response_data['data'].get('metadata', {})
                 user_id = metadata.get('user_id')
-                amount = metadata.get('amount', 0)
-                bonus = metadata.get('bonus', 0)
-                total_credits = metadata.get('total_credits', amount)
+                amount = Decimal(str(metadata.get('amount', 0)))
+                bonus = Decimal(str(metadata.get('bonus', 0)))
+                total_credits = Decimal(str(metadata.get('total_credits', amount)))
                 
                 try:
                     user = User.objects.get(id=user_id)
@@ -271,7 +307,7 @@ def verify_payment(request):
                         balance_after=profile.balance
                     )
                     
-                    return redirect('webdialer:account', tab='transaction_history')
+                    return redirect('/webdialer/account/?tab=transaction_history')
                 except User.DoesNotExist:
                     return JsonResponse({'error': 'User not found'}, status=404)
             else:
@@ -294,9 +330,9 @@ def paystack_webhook(request):
                 reference = data.get('reference')
                 metadata = data.get('metadata', {})
                 user_id = metadata.get('user_id')
-                amount = metadata.get('amount', 0)
-                bonus = metadata.get('bonus', 0)
-                total_credits = metadata.get('total_credits', amount)
+                amount = Decimal(str(metadata.get('amount', 0)))
+                bonus = Decimal(str(metadata.get('bonus', 0)))
+                total_credits = Decimal(str(metadata.get('total_credits', amount)))
                 
                 try:
                     user = User.objects.get(id=user_id)

@@ -99,6 +99,13 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/webdialer/'
 LOGOUT_REDIRECT_URL = '/'
 
+# Force HTTPS when behind ngrok
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 # django-allauth (0.61+) — email-based sign-in via Google
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
@@ -188,5 +195,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Paystack Payment Configuration
 PAYSTACK_PUBLIC_KEY = os.getenv('PAYSTACK_PUBLIC_KEY', 'pk_test_b8445146a7887bbb46ac3f991cca0bab6bce663a')
 PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY', '')  # Add your secret key to .env file
-PAYSTACK_CALLBACK_URL = os.getenv('PAYSTACK_CALLBACK_URL', 'https://f198-197-211-63-22.ngrok-free.app/billing/verify/')
-PAYSTACK_WEBHOOK_URL = os.getenv('PAYSTACK_WEBHOOK_URL', 'https://f198-197-211-63-22.ngrok-free.app/billing/webhook/')
+PAYSTACK_CALLBACK_URL = os.getenv('PAYSTACK_CALLBACK_URL', 'https://cef5-197-211-63-22.ngrok-free.app/webdialer/billing/verify/')
+PAYSTACK_WEBHOOK_URL = os.getenv('PAYSTACK_WEBHOOK_URL', 'https://cef5-197-211-63-22.ngrok-free.app/webdialer/billing/webhook/')

@@ -1189,6 +1189,158 @@ body.dashboard-body {
   color: var(--coral);
 }
 
+/* ─── NOTIFICATION TOAST SYSTEM ─── */
+.notification-container {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 9999999 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  pointer-events: none !important;
+  max-height: calc(100vh - 40px) !important;
+  overflow-y: auto !important;
+  width: auto !important;
+  max-width: 400px !important;
+}
+
+.notification-container .notification {
+  pointer-events: auto !important;
+}
+
+.notification {
+  min-width: 300px !important;
+  max-width: 400px !important;
+  padding: 16px 20px !important;
+  border-radius: 12px !important;
+  background: #151a2d !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  animation: slideIn 0.3s ease-out !important;
+  position: relative !important;
+  overflow: hidden !important;
+  color: #ffffff !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.notification::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.notification.success::before {
+  background: #10b981;
+}
+
+.notification.success .notification-icon {
+  color: #10b981;
+}
+
+.notification.error::before {
+  background: #ef4444;
+}
+
+.notification.error .notification-icon {
+  color: #ef4444;
+}
+
+.notification.warning::before {
+  background: #f59e0b;
+}
+
+.notification.warning .notification-icon {
+  color: #f59e0b;
+}
+
+.notification.info::before {
+  background: #3b82f6;
+}
+
+.notification.info .notification-icon {
+  color: #3b82f6;
+}
+
+.notification-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.notification-message {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.notification-close {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease-out;
+  flex-shrink: 0;
+}
+
+.notification-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.notification.hiding {
+  animation: slideOut 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
 /* ─── PAYMENT PROGRESS ─── */
 .payment-progress {
   display: flex;
