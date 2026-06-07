@@ -2003,6 +2003,14 @@ body.dashboard-body {
   .topup-cards {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  .payment-page {
+    max-width: 100%;
+  }
+  
+  .package-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -2054,6 +2062,138 @@ body.dashboard-body {
   .topup-cards {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  /* Payment page responsive */
+  .payment-page {
+    padding: 16px;
+  }
+  
+  .payment-header {
+    text-align: center;
+  }
+  
+  .payment-account-info {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .recharge-amount-section {
+    margin-bottom: 24px;
+  }
+  
+  .amount-input-group {
+    width: 100%;
+  }
+  
+  .amount-input {
+    width: 100%;
+  }
+  
+  .package-options {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .package-card {
+    padding: 16px;
+  }
+  
+  .payment-button {
+    width: 100%;
+  }
+  
+  .payment-security-info {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .security-note {
+    font-size: 0.85rem;
+  }
+  
+  /* Phone dialer responsive */
+  .phone-dialer-container {
+    flex-direction: column;
+    padding: 16px;
+  }
+  
+  .dialer-display {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .dialer-keypad {
+    width: 100%;
+  }
+  
+  .dialer-button {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+  
+  /* Account page responsive */
+  .account-content {
+    padding: 20px;
+  }
+  
+  .account-tabs {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .current-balance {
+    padding: 16px;
+  }
+  
+  .transaction-table {
+    overflow-x: auto;
+  }
+  
+  /* Help page responsive */
+  .help-container {
+    padding: 16px;
+  }
+  
+  .help-section {
+    margin-bottom: 24px;
+  }
+  
+  /* SMS page responsive */
+  .sms-messages-list {
+    max-height: 400px;
+  }
+  
+  .sms-message-input {
+    flex-direction: column;
+  }
+  
+  .sms-message-input textarea {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  .send-sms-button {
+    width: 100%;
+  }
+  
+  /* Notification responsive */
+  .notification {
+    min-width: 280px;
+    max-width: 350px;
+  }
+  
+  .notification-container {
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2066,10 +2206,127 @@ body.dashboard-body {
   }
   
   .account-content {
-    padding: 20px;
+    padding: 16px;
   }
   
   .transaction-table {
     overflow-x: auto;
+  }
+  
+  /* Payment page small mobile */
+  .payment-page {
+    padding: 12px;
+  }
+  
+  .payment-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .payment-header p {
+    font-size: 0.9rem;
+  }
+  
+  .package-card {
+    padding: 12px;
+  }
+  
+  .package-amount {
+    font-size: 1.25rem;
+  }
+  
+  .package-bonus {
+    font-size: 0.85rem;
+  }
+  
+  /* Phone dialer small mobile */
+  .dialer-button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+  
+  .dialer-display input {
+    font-size: 1.25rem;
+  }
+  
+  /* Account page small mobile */
+  .account-tabs {
+    gap: 8px;
+  }
+  
+  .tab-btn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .current-balance {
+    padding: 12px;
+  }
+  
+  .balance-amount {
+    font-size: 1.75rem;
+  }
+  
+  /* SMS page small mobile */
+  .sms-container {
+    flex-direction: column;
+  }
+  
+  .sms-sidebar {
+    max-height: 250px;
+  }
+  
+  .sms-message {
+    padding: 12px;
+  }
+  
+  /* History page small mobile */
+  .history-header {
+    padding: 12px;
+  }
+  
+  .call-table {
+    font-size: 0.85rem;
+  }
+  
+  /* Phone numbers page small mobile */
+  .phone-numbers-header {
+    padding: 12px;
+  }
+  
+  .get-number-button {
+    width: 100%;
+  }
+  
+  /* Notification small mobile */
+  .notification {
+    min-width: 260px;
+    max-width: 320px;
+    padding: 12px 16px;
+  }
+  
+  .notification-title {
+    font-size: 0.9rem;
+  }
+  
+  .notification-message {
+    font-size: 0.8rem;
+  }
+  
+  /* Dashboard base small mobile */
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .header-logo {
+    font-size: 1.25rem;
+  }
+  
+  .user-menu {
+    gap: 12px;
+  }
+  
+  .main-content-inner {
+    padding: 12px;
   }
 }
