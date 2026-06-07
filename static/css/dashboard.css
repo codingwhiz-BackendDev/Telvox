@@ -25,6 +25,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  max-width: 100%;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body.dashboard-body {
@@ -32,12 +38,16 @@ body.dashboard-body {
   background: var(--bg);
   color: var(--text-primary);
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* ─── DASHBOARD CONTAINER ─── */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* ─── SIDEBAR ─── */
@@ -51,8 +61,25 @@ body.dashboard-body {
   left: 0;
   top: 0;
   height: 100vh;
-  z-index: 100;
+  z-index: 100000;
   transition: transform 0.3s var(--ease-spring);
+  overflow-x: hidden;
+  transform: translateX(0);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+/* Hide sidebar by default on mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
 }
 
 .sidebar-header {
@@ -163,15 +190,46 @@ body.dashboard-body {
 .mobile-toggle {
   display: none;
   position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 200;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
+  top: 20px;
+  left: 20px;
+  z-index: 100000;
+  background: var(--primary);
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
   cursor: pointer;
-  color: var(--text-primary);
+  color: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(6, 199, 160, 0.4);
+}
+
+.mobile-toggle:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6, 199, 160, 0.6);
+}
+
+.mobile-toggle:active {
+  transform: scale(0.95);
+}
+
+/* ─── SIDEBAR OVERLAY ─── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
 }
 
 /* ─── DIALER TOGGLE ─── */
@@ -217,6 +275,8 @@ body.dashboard-body {
 
 .main-content-inner {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* ─── PHONE DIALER ─── */
@@ -623,7 +683,7 @@ body.dashboard-body {
 
 /* ─── HISTORY PAGE ─── */
 .history-container {
-  max-width: 1200px;
+  max-width: 100%;
 }
 
 .history-header {
@@ -759,7 +819,7 @@ body.dashboard-body {
 
 /* ─── PHONE NUMBERS PAGE ─── */
 .phone-numbers-container {
-  max-width: 1200px;
+  max-width: 100%;
 }
 
 .phone-numbers-header {
@@ -888,7 +948,7 @@ body.dashboard-body {
 
 /* ─── ACCOUNT PAGE ─── */
 .account-container {
-  max-width: 1000px;
+  max-width: 100%;
 }
 
 .account-tabs {
@@ -2014,21 +2074,22 @@ body.dashboard-body {
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-  
-  .sidebar.open {
-    transform: translateX(0);
-  }
-  
   .mobile-toggle {
-    display: block;
+    display: block !important;
+  }
+  
+  .sidebar-overlay {
+    display: block !important;
+  }
+  
+  .sidebar-overlay.active {
+    opacity: 1;
   }
   
   .main-content {
     margin-left: 0;
     padding: 24px 16px;
+    width: 100%;
   }
   
   .history-header {
@@ -2216,6 +2277,8 @@ body.dashboard-body {
   /* Payment page small mobile */
   .payment-page {
     padding: 12px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .payment-header h2 {
@@ -2328,5 +2391,14 @@ body.dashboard-body {
   
   .main-content-inner {
     padding: 12px;
+  }
+  
+  /* Ensure no horizontal scroll on mobile */
+  .main-content {
+    overflow-x: hidden;
+  }
+  
+  .sidebar {
+    overflow-x: hidden;
   }
 }

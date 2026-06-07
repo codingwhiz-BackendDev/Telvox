@@ -113,21 +113,30 @@ function showNotification(type, title, message, duration = 5000) {
 // Mobile sidebar toggle
 const mobileToggle = document.getElementById('mobileToggle');
 const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-if (mobileToggle && sidebar) {
+if (mobileToggle && sidebar && sidebarOverlay) {
   mobileToggle.addEventListener('click', () => {
     sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('active');
+  });
+
+  // Close sidebar when clicking overlay
+  sidebarOverlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('active');
+  });
+
+  // Close sidebar when clicking outside on mobile
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+      if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target) && !sidebarOverlay.contains(e.target)) {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+      }
+    }
   });
 }
-
-// Close sidebar when clicking outside on mobile
-document.addEventListener('click', (e) => {
-  if (window.innerWidth <= 768) {
-    if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
-      sidebar.classList.remove('open');
-    }
-  }
-});
 
 // Account tabs
 const tabBtns = document.querySelectorAll('.tab-btn');

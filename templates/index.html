@@ -23,7 +23,7 @@
     <a href="#how" onclick="closeMob()">How It Works</a>
     <a href="#download" onclick="closeMob()">App</a>
     <a href="#faq" onclick="closeMob()">FAQ</a>
-    <a href="#pricing" style="background:var(--grad-cta);color:#fff;padding:14px 36px;border-radius:50px;font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800" onclick="closeMob()" aria-label="Get started with Telvox">Get Started</a>
+    <a href="{% url 'register' %}" style="background:var(--grad-cta);color:#fff;padding:14px 36px;border-radius:50px;font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800" onclick="closeMob()" aria-label="Get started with Telvox">Get Started</a>
   </nav>
 </div>
 
@@ -45,7 +45,7 @@
     </ul>
     <div class="nav-right">
       <a href="{% url 'login' %}" class="btn-ghost-nav">Sign In</a>
-      <a href="#pricing" class="btn-cta-nav has-ripple" onclick="addRipple(event,this)" aria-label="Get a phone number">Get a Number</a>
+      <a href="{% url 'register' %}" class="btn-cta-nav has-ripple" onclick="addRipple(event,this)" aria-label="Get a phone number">Get a Number</a>
       <button class="hamburger" onclick="openMob()" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobileNav">
         <span></span><span></span><span></span>
       </button>
@@ -87,7 +87,7 @@
       </p>
 
       <div class="hero-actions">
-        <a href="#pricing" class="btn-hero-primary has-ripple" onclick="addRipple(event,this)" aria-label="Get your phone number now">
+        <a href="{% url 'register' %}" class="btn-hero-primary has-ripple" onclick="addRipple(event,this)" aria-label="Get your phone number now">
           <span>Get Your Number</span>
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -262,7 +262,7 @@
           <li><div class="p-check" aria-hidden="true"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span>Instant activation</span></li>
           <li><div class="p-check" aria-hidden="true"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span>Web dialer included</span></li>
         </ul>
-        <a href="#" class="btn-p-outline has-ripple" onclick="addRipple(event,this)" aria-label="Get a United States phone number">Get US Number</a>
+        <a href="{% url 'register' %}" class="btn-p-outline has-ripple" onclick="addRipple(event,this)" aria-label="Get a United States phone number">Get US Number</a>
       </article>
 
       <!-- Canada -->
@@ -283,7 +283,7 @@
           <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Instant activation</li>
           <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Web dialer included</li>
         </ul>
-        <a href="#" class="btn-p-outline has-ripple" onclick="addRipple(event,this)">Get Canada Number</a>
+        <a href="{% url 'register' %}" class="btn-p-outline has-ripple" onclick="addRipple(event,this)">Get Canada Number</a>
       </div>
 
       <!-- UK — Featured -->
@@ -305,7 +305,7 @@
           <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Instant activation</li>
           <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Web dialer included</li>
         </ul>
-        <a href="#" class="btn-p-solid has-ripple" onclick="addRipple(event,this)">
+        <a href="{% url 'register' %}" class="btn-p-solid has-ripple" onclick="addRipple(event,this)">
           Get UK Number
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -329,7 +329,7 @@
           <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Instant activation</li>
           <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Web dialer included</li>
         </ul>
-        <a href="#" class="btn-p-outline has-ripple" onclick="addRipple(event,this)">Get AU Number</a>
+        <a href="{% url 'register' %}" class="btn-p-outline has-ripple" onclick="addRipple(event,this)">Get AU Number</a>
       </div>
 
     </div>
@@ -660,7 +660,7 @@
     <h2 class="cta-h2">Your number<br>is <em>waiting</em></h2>
     <p class="cta-p">Join 150,000+ people who use Telvox for clear, private, global communication. Active in under 2 minutes — no credit card required.</p>
     <div class="cta-btns">
-      <a href="#pricing" class="btn-cta-main has-ripple" onclick="addRipple(event,this)">
+      <a href="{% url 'register' %}" class="btn-cta-main has-ripple" onclick="addRipple(event,this)">
         Get Your Number — from $0.99
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -733,7 +733,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 Telvox. All rights reserved. Powered by Twilio & Stripe.</p>
+    <p>© 2026 Telvox. All rights reserved. Powered by Twilio & Stripe.</p>
     <div class="footer-bottom-links">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
