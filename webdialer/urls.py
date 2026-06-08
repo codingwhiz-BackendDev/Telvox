@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.sms_view, name='sms'),
     path('history/', views.history_view, name='history'),
     path('phone-numbers/', views.phone_numbers_view, name='phone_numbers'),
+    path('dialer/', views.dialer_view, name='dialer'),
     path('account/', views.account_view, name='account'),
     path('account/balance-transfer/', views.balance_transfer_view, name='balance_transfer'),
     path('account/payment/', views.payment_view, name='payment'),

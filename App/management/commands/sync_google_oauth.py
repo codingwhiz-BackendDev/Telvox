@@ -20,7 +20,7 @@ class Command(BaseCommand):
             pk=settings.SITE_ID,
             defaults={
                 'domain': '127.0.0.1:8000',
-                'name': 'Telvox Local',
+                'name': 'SAMAPPTECH Local',
             },
         )
 

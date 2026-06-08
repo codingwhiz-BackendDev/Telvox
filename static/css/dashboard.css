@@ -82,6 +82,41 @@ body.dashboard-body {
   }
 }
 
+/* Hide mobile bottom navigation on desktop */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* Hide mobile account sub-nav on desktop */
+.mobile-account-nav {
+  display: none;
+}
+
+.mobile-account-overlay {
+  display: none;
+}
+
+/* Show phone dialer on desktop by default */
+.phone-dialer {
+  display: block;
+}
+
+.phone-dialer-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Hide phone dialer on mobile by default */
+  .phone-dialer {
+    display: none;
+  }
+  
+  /* Show phone dialer on dedicated dialer page */
+  .phone-dialer.dialer-full-page {
+    display: block;
+  }
+}
+
 .sidebar-header {
   padding: 24px;
   border-bottom: 1px solid var(--border);
@@ -271,12 +306,15 @@ body.dashboard-body {
   min-height: 100vh;
   display: flex;
   gap: 24px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .main-content-inner {
   flex: 1;
   width: 100%;
   max-width: 100%;
+  padding: 0;
 }
 
 /* ─── PHONE DIALER ─── */
@@ -294,6 +332,45 @@ body.dashboard-body {
 
 .phone-dialer.hidden {
   display: none;
+}
+
+.dialer-page {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+}
+
+.dialer-page-header {
+  margin-bottom: 24px;
+  padding: 0 16px;
+}
+
+.dialer-page-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.phone-dialer.dialer-full-page {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
+  border: none;
+  padding: 16px;
+  position: static;
+  height: 100%;
+  min-height: calc(100vh - 60px);
+}
+
+@media (min-width: 769px) {
+  .phone-dialer.dialer-full-page {
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    height: auto;
+    min-height: auto;
+  }
 }
 
 .main-content.dialer-hidden {
@@ -949,14 +1026,11 @@ body.dashboard-body {
 /* ─── ACCOUNT PAGE ─── */
 .account-container {
   max-width: 100%;
+  width: 100%;
 }
 
 .account-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 32px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 16px;
+  display: none;
 }
 
 .tab-btn {
@@ -984,14 +1058,18 @@ body.dashboard-body {
   border-radius: 16px;
   border: 1px solid var(--border);
   padding: 32px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .tab-pane {
   display: none;
+  width: 100%;
 }
 
 .tab-pane.active {
   display: block;
+  width: 100%;
 }
 
 .current-balance {
@@ -1022,6 +1100,8 @@ body.dashboard-body {
   margin-top: 16px;
   justify-content: center;
   justify-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 .payment-method-card {
@@ -1075,8 +1155,8 @@ body.dashboard-body {
 
 /* ─── PAYMENT PAGE ─── */
 .payment-page {
-  max-width: 600px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
   background: var(--bg-card);
   border-radius: 20px;
   border: 1px solid var(--border);
@@ -2071,25 +2151,369 @@ body.dashboard-body {
   .package-options {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  .account-container {
+    padding: 20px;
+  }
+  
+  .payment-methods-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+/* Mobile bottom nav icon size - apply to all screen sizes */
+.mobile-nav-item .material-icons-round {
+  font-size: 32px !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.mobile-nav-item svg {
+  width: 32px !important;
+  height: 32px !important;
 }
 
 @media (max-width: 768px) {
   .mobile-toggle {
-    display: block !important;
+    display: none !important;
   }
   
   .sidebar-overlay {
-    display: block !important;
+    display: none !important;
   }
   
   .sidebar-overlay.active {
+    display: block !important;
     opacity: 1;
   }
   
   .main-content {
     margin-left: 0;
-    padding: 24px 16px;
+    padding: 0;
     width: 100%;
+    min-height: 100vh;
+    padding-bottom: 60px; /* Space for bottom nav */
+    position: relative;
+    z-index: 1;
+    touch-action: manipulation;
+    transform: translateZ(0);
+  }
+  
+  .main-content-inner {
+    padding: 16px;
+    position: relative;
+    z-index: 1;
+    touch-action: manipulation;
+    transform: translateZ(0);
+  }
+  
+  /* Ensure all buttons and links are clickable on mobile */
+  button,
+  a,
+  .btn,
+  .get-number-button,
+  .tab-btn {
+    touch-action: manipulation;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transform: translateZ(0);
+  }
+  
+  /* Mobile Bottom Navigation */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-sidebar);
+    border-top: 1px solid var(--border);
+    padding: 8px 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    height: 60px;
+    pointer-events: auto;
+    overflow: hidden;
+    max-width: 100vw;
+    width: 100%;
+    box-sizing: border-box;
+    transform: translateZ(0);
+  }
+  
+  .mobile-nav-item {
+    pointer-events: auto;
+    transform: translateZ(0);
+  }
+  
+  .mobile-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .mobile-nav-item svg {
+    transition: all 0.3s ease;
+    width: 48px !important;
+    height: 48px !important;
+  }
+  
+  .mobile-nav-item span {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .mobile-nav-item.active {
+    color: var(--primary);
+  }
+  
+  .mobile-nav-item.active svg {
+    stroke: var(--primary);
+  }
+  
+  .mobile-nav-item:hover {
+    color: var(--primary);
+  }
+  
+  .dialer-nav-btn {
+    background: none;
+    color: var(--text-secondary);
+  }
+  
+  .dialer-nav-btn svg {
+    stroke: var(--text-secondary);
+  }
+  
+  .dialer-nav-btn span {
+    color: var(--text-secondary);
+  }
+  
+  .dialer-nav-btn.active {
+    color: var(--primary);
+  }
+  
+  .dialer-nav-btn.active svg {
+    stroke: var(--primary);
+  }
+  
+  /* Mobile Account Sub-Nav */
+  .mobile-account-nav {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    z-index: 10001;
+    transform: translateX(-100%);
+    transition: transform 0.3s var(--ease-spring);
+    overflow-y: auto;
+  }
+  
+  .mobile-account-nav.open {
+    transform: translateX(0);
+  }
+  
+  .mobile-account-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .mobile-account-nav-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .mobile-account-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .mobile-account-close:hover {
+    background: var(--border);
+    color: var(--text-primary);
+  }
+  
+  .mobile-account-nav-links {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 4px;
+  }
+  
+  .mobile-account-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .mobile-account-nav-link:hover {
+    background: var(--border);
+    color: var(--text-primary);
+  }
+  
+  .mobile-account-nav-link.active {
+    background: var(--primary);
+    color: #fff;
+  }
+  
+  .mobile-account-nav-link.active svg {
+    stroke: #fff;
+  }
+  
+  .mobile-account-overlay {
+    display: none !important;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .mobile-account-overlay.active {
+    display: block !important;
+    opacity: 1;
+  }
+  
+  /* Hide desktop sidebar on mobile */
+  .sidebar {
+    display: none;
+  }
+  
+  /* Hide desktop mobile toggle on mobile since we have bottom nav */
+  .mobile-toggle {
+    display: none !important;
+  }
+  
+  /* Ensure main content is above any hidden elements */
+  .dashboard-container {
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+  }
+  
+  /* Ensure body allows clicks on mobile */
+  .dashboard-body {
+    overflow-x: hidden;
+    touch-action: manipulation;
+  }
+  
+  /* Hide dialer toggle on mobile since we have it in bottom nav */
+  .dialer-toggle {
+    display: none !important;
+  }
+  
+  /* Mobile phone dialer modal */
+  .phone-dialer.mobile-modal {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-sidebar);
+    border-top: 1px solid var(--border);
+    border-radius: 20px 20px 0 0;
+    padding: 24px;
+    z-index: 10002;
+    transform: translateY(100%);
+    transition: transform 0.3s var(--ease-spring);
+    max-height: 80vh;
+    overflow-y: auto;
+    pointer-events: auto;
+  }
+  
+  .phone-dialer.mobile-modal.open {
+    transform: translateY(0);
+  }
+  
+  .phone-dialer.open {
+    transform: translateY(0);
+  }
+  
+  .phone-dialer-overlay {
+    display: none !important;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10001;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .phone-dialer-overlay.active {
+    display: block !important;
+    opacity: 1;
+  }
+  
+  /* Ensure SMS container fills screen on mobile */
+  .sms-container {
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sms-sidebar {
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  .sms-main {
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  /* Ensure other page containers fill screen on mobile */
+  .account-container,
+  .help-container,
+  .payment-page,
+  .phone-numbers-container {
+    min-height: calc(100vh - 60px);
+    width: 100%;
+  }
+  
+  .history-container {
+    min-height: calc(100vh - 60px);
+    width: 100%;
+  }
+  
+  /* Ensure account tabs take full page on mobile */
+  .account-tabs,
+  .account-content {
+    width: 100%;
+  }
+  
+  .account-tab-content {
+    width: 100%;
+    min-height: calc(100vh - 60px);
   }
   
   .history-header {
@@ -2227,15 +2651,46 @@ body.dashboard-body {
   }
   
   /* SMS page responsive */
-  .sms-messages-list {
-    max-height: 400px;
+  .sms-container {
+    flex-direction: column;
+    height: calc(100vh - 120px);
   }
   
-  .sms-message-input {
+  .sms-sidebar {
+    width: 100%;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .sms-main {
+    flex: 1;
+  }
+  
+  .chat-header {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+  
+  .chat-messages {
+    max-height: calc(100vh - 300px);
+  }
+  
+  .message-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+  }
+  
+  .compose-area {
+    padding: 12px;
+  }
+  
+  .compose-form {
     flex-direction: column;
   }
   
-  .sms-message-input textarea {
+  .compose-form textarea {
     width: 100%;
     margin-bottom: 12px;
   }
@@ -2244,6 +2699,302 @@ body.dashboard-body {
     width: 100%;
   }
   
+  .virtual-number-pill {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  
+  /* History page responsive */
+  .history-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .search-form {
+    width: 100%;
+  }
+  
+  .search-form input {
+    width: 100%;
+  }
+  
+  .call-table {
+    overflow-x: auto;
+  }
+  
+  .call-table table {
+    min-width: 600px;
+  }
+  
+  .call-table th,
+  .call-table td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
+  
+  /* Phone numbers page responsive */
+  .phone-numbers-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .get-number-button {
+    width: 100%;
+  }
+  
+  .numbers-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .number-card {
+    padding: 16px;
+  }
+  
+  /* Account page responsive */
+  .account-container {
+    padding: 16px;
+  }
+  
+  .account-tabs {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 16px;
+  }
+  
+  .account-content {
+    padding: 16px;
+  }
+  
+  .current-balance {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .payment-method-card {
+    padding: 16px;
+  }
+  
+  .transfer-form {
+    padding: 16px;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .transaction-table {
+    overflow-x: auto;
+  }
+  
+  .transaction-table table {
+    min-width: 500px;
+  }
+  
+  /* Payment page responsive */
+  .payment-page {
+    padding: 16px;
+  }
+  
+  .payment-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .payment-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .payment-account-info {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .recharge-amount-section {
+    margin-bottom: 20px;
+  }
+  
+  .amount-input-group {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .amount-input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.25rem;
+  }
+  
+  .package-options {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .package-card {
+    padding: 16px;
+  }
+  
+  .package-amount {
+    font-size: 1.5rem;
+  }
+  
+  .payment-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+  }
+  
+  .payment-security-info {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .security-note {
+    font-size: 0.8rem;
+  }
+  
+  /* Help page responsive */
+  .help-container {
+    padding: 16px;
+  }
+  
+  .help-section {
+    margin-bottom: 20px;
+    padding: 16px;
+  }
+  
+  .help-section h3 {
+    font-size: 1.1rem;
+  }
+  
+  .help-section p {
+    font-size: 0.9rem;
+  }
+  
+  /* Phone dialer responsive */
+  .phone-dialer-container {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .dialer-display {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .dialer-display input {
+    font-size: 1.5rem;
+    padding: 16px;
+  }
+  
+  .dialer-keypad {
+    width: 100%;
+    gap: 12px;
+  }
+  
+  .dialer-button {
+    width: 70px;
+    height: 70px;
+    font-size: 1.5rem;
+  }
+  
+  .dialer-call-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+  }
+  
+  /* Dialer toggle responsive */
+  .dialer-toggle {
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  .dialer-toggle svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Notification responsive */
+  .notification {
+    min-width: 280px;
+    max-width: 350px;
+    padding: 12px 16px;
+  }
+  
+  .notification-title {
+    font-size: 0.9rem;
+  }
+  
+  .notification-message {
+    font-size: 0.8rem;
+  }
+  
+  /* Main content inner responsive */
+  .main-content-inner {
+    padding: 16px;
+  }
+  
+  /* Sidebar responsive */
+  .sidebar {
+    width: 280px;
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+  }
+  
+  .sidebar-logo-name {
+    font-size: 1.2rem;
+  }
+  
+  .sidebar-balance {
+    padding: 16px 20px;
+  }
+  
+  .sidebar-nav {
+    padding: 12px;
+  }
+  
+  .nav-item {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .sidebar-footer {
+    padding: 16px;
+  }
+  
+  .logout-btn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+
   /* Notification responsive */
   .notification {
     min-width: 280px;
@@ -2263,30 +3014,19 @@ body.dashboard-body {
   }
   
   .topup-cards {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
   
-  .account-content {
-    padding: 16px;
-  }
-  
-  .transaction-table {
-    overflow-x: auto;
-  }
-  
-  /* Payment page small mobile */
   .payment-page {
     padding: 12px;
-    width: 100%;
-    max-width: 100%;
   }
   
   .payment-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
   
   .payment-header p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
   
   .package-card {
@@ -2303,8 +3043,8 @@ body.dashboard-body {
   
   /* Phone dialer small mobile */
   .dialer-button {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     font-size: 1.25rem;
   }
   
@@ -2314,12 +3054,12 @@ body.dashboard-body {
   
   /* Account page small mobile */
   .account-tabs {
-    gap: 8px;
+    gap: 6px;
   }
   
   .tab-btn {
-    padding: 12px 16px;
-    font-size: 0.9rem;
+    padding: 10px 12px;
+    font-size: 0.85rem;
   }
   
   .current-balance {
@@ -2327,20 +3067,34 @@ body.dashboard-body {
   }
   
   .balance-amount {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
   
   /* SMS page small mobile */
-  .sms-container {
-    flex-direction: column;
-  }
-  
   .sms-sidebar {
-    max-height: 250px;
+    max-height: 150px;
   }
   
-  .sms-message {
-    padding: 12px;
+  .chat-header {
+    padding: 10px;
+  }
+  
+  .chat-header span {
+    font-size: 0.85rem;
+  }
+  
+  .message-bubble {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .compose-area {
+    padding: 10px;
+  }
+  
+  .virtual-number-pill {
+    font-size: 0.75rem;
+    padding: 4px 10px;
   }
   
   /* History page small mobile */
@@ -2348,8 +3102,10 @@ body.dashboard-body {
     padding: 12px;
   }
   
-  .call-table {
-    font-size: 0.85rem;
+  .call-table th,
+  .call-table td {
+    padding: 8px 6px;
+    font-size: 0.8rem;
   }
   
   /* Phone numbers page small mobile */
@@ -2357,48 +3113,130 @@ body.dashboard-body {
     padding: 12px;
   }
   
-  .get-number-button {
-    width: 100%;
+  .number-card {
+    padding: 12px;
+  }
+  
+  /* Help page small mobile */
+  .help-container {
+    padding: 12px;
+  }
+  
+  .help-section {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .help-section h3 {
+    font-size: 1rem;
+  }
+  
+  .help-section p {
+    font-size: 0.85rem;
   }
   
   /* Notification small mobile */
   .notification {
     min-width: 260px;
     max-width: 320px;
-    padding: 12px 16px;
+    padding: 10px 14px;
   }
   
   .notification-title {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
   
   .notification-message {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   
-  /* Dashboard base small mobile */
-  .header {
-    padding: 12px 16px;
-  }
-  
-  .header-logo {
-    font-size: 1.25rem;
-  }
-  
-  .user-menu {
-    gap: 12px;
+  /* Main content small mobile */
+  .main-content {
+    padding: 16px 12px;
   }
   
   .main-content-inner {
     padding: 12px;
   }
   
-  /* Ensure no horizontal scroll on mobile */
-  .main-content {
-    overflow-x: hidden;
+  /* Sidebar small mobile */
+  .sidebar {
+    width: 260px;
   }
   
-  .sidebar {
-    overflow-x: hidden;
+  .sidebar-header {
+    padding: 16px;
+  }
+  
+  .sidebar-logo-name {
+    font-size: 1.1rem;
+  }
+  
+  .sidebar-balance {
+    padding: 12px 16px;
+  }
+  
+  .balance-amount {
+    font-size: 1.25rem;
+  }
+  
+  .nav-item {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .nav-item svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .sidebar-footer {
+    padding: 12px;
+  }
+  
+  .logout-btn {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .logout-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Mobile toggle small mobile */
+  .mobile-toggle {
+    top: 16px;
+    left: 16px;
+    padding: 12px;
+  }
+  
+  .mobile-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Dialer toggle small mobile */
+  .dialer-toggle {
+    bottom: 16px;
+    right: 16px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .dialer-toggle svg {
+    width: 22px;
+    height: 22px;
+  }
+  
+  /* Form elements small mobile */
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+  
+  button {
+    min-height: 44px; /* Touch target size */
   }
 }

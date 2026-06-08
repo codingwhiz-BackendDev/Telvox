@@ -1,3 +1,47 @@
+// ─── MOBILE BOTTOM NAV & ACCOUNT SUB-NAV ───
+const mobileAccountNav = document.getElementById('mobileAccountNav');
+const mobileAccountOverlay = document.getElementById('mobileAccountOverlay');
+const mobileAccountClose = document.getElementById('mobileAccountClose');
+
+// Handle account button click in bottom nav
+const mobileAccountBtn = document.querySelector('.mobile-bottom-nav a[href*="account"]');
+if (mobileAccountBtn) {
+  mobileAccountBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (mobileAccountNav && mobileAccountOverlay) {
+      mobileAccountNav.style.display = 'block';
+      mobileAccountOverlay.style.display = 'block';
+      setTimeout(() => {
+        mobileAccountNav.classList.add('open');
+        mobileAccountOverlay.classList.add('active');
+      }, 10);
+    }
+  });
+}
+
+// Don't auto-show sub-nav on account page - only show when account button is clicked
+
+// Close mobile account sub-nav
+if (mobileAccountClose && mobileAccountNav && mobileAccountOverlay) {
+  mobileAccountClose.addEventListener('click', () => {
+    mobileAccountNav.classList.remove('open');
+    mobileAccountOverlay.classList.remove('active');
+    setTimeout(() => {
+      mobileAccountNav.style.display = 'none';
+      mobileAccountOverlay.style.display = 'none';
+    }, 300);
+  });
+
+  mobileAccountOverlay.addEventListener('click', () => {
+    mobileAccountNav.classList.remove('open');
+    mobileAccountOverlay.classList.remove('active');
+    setTimeout(() => {
+      mobileAccountNav.style.display = 'none';
+      mobileAccountOverlay.style.display = 'none';
+    }, 300);
+  });
+}
+
 // Notification system
 function showNotification(type, title, message, duration = 5000) {
   const container = document.getElementById('notificationContainer');
@@ -215,9 +259,20 @@ const dialerStatus = document.getElementById('dialerStatus');
 const dialerKeys = document.querySelectorAll('.dialer-key');
 
 if (dialerInput) {
+  // Prevent dialer from closing when clicking on input
+  dialerInput.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent event from bubbling to overlay
+  });
+
+  // Prevent dialer from closing when typing in input
+  dialerInput.addEventListener('input', (e) => {
+    e.stopPropagation(); // Prevent event from bubbling to overlay
+  });
+
   // Handle keypad button clicks
   dialerKeys.forEach(key => {
-    key.addEventListener('click', () => {
+    key.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent event from bubbling to overlay
       const value = key.dataset.value;
       dialerInput.value += value;
     });
@@ -225,14 +280,16 @@ if (dialerInput) {
   
   // Handle backspace
   if (dialerBackspace) {
-    dialerBackspace.addEventListener('click', () => {
+    dialerBackspace.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent event from bubbling to overlay
       dialerInput.value = dialerInput.value.slice(0, -1);
     });
   }
   
   // Handle call button
   if (dialerCallBtn) {
-    dialerCallBtn.addEventListener('click', () => {
+    dialerCallBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent event from bubbling to overlay
       const phoneNumber = dialerInput.value.trim();
       
       if (!phoneNumber) {

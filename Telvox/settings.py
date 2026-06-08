@@ -29,7 +29,10 @@ SECRET_KEY = 'django-insecure-uv5xxlt-@ke(5x5e+!$14mneg1#%xvi6i9d1b*)ls1*m6k*mmt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "*"
+    
+]
 
 
 # Application definition
@@ -182,6 +185,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files
 MEDIA_URL = '/media/'
@@ -195,5 +199,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Paystack Payment Configuration
 PAYSTACK_PUBLIC_KEY = os.getenv('PAYSTACK_PUBLIC_KEY', 'pk_test_b8445146a7887bbb46ac3f991cca0bab6bce663a')
 PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY', '')  # Add your secret key to .env file
-PAYSTACK_CALLBACK_URL = os.getenv('PAYSTACK_CALLBACK_URL', 'https://cef5-197-211-63-22.ngrok-free.app/webdialer/billing/verify/')
-PAYSTACK_WEBHOOK_URL = os.getenv('PAYSTACK_WEBHOOK_URL', 'https://cef5-197-211-63-22.ngrok-free.app/webdialer/billing/webhook/')
+PAYSTACK_CALLBACK_URL = os.getenv('PAYSTACK_CALLBACK_URL', 'https://9838-197-211-63-84.ngrok-free.app/webdialer/billing/verify/')
+PAYSTACK_WEBHOOK_URL = os.getenv('PAYSTACK_WEBHOOK_URL', 'https://9838-197-211-63-84.ngrok-free.app/webdialer/billing/webhook/')

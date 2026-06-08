@@ -358,6 +358,19 @@ def paystack_webhook(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required
+def dialer_view(request):
+    user = request.user
+    try:
+        profile = user.userprofile
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(user=user, balance=0.00)
+    
+    context = {
+        'user': user,
+    }
+    return render(request, 'dialer.html', context)
+
+@login_required
 def send_sms_view(request):
     if request.method == 'POST':
         user = request.user

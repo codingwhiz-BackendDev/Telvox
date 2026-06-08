@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{% block title %}Telvox Dashboard{% endblock %}</title>
+    <title>{% block title %}SAMAPPTECH Dashboard{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 <body class="dashboard-body">
@@ -19,7 +20,7 @@
                     <div class="sidebar-logo-mark">
                         <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
                     </div>
-                    <span class="sidebar-logo-name">Tel<span>vox</span></span>
+                    <span class="sidebar-logo-name">SAMAPPTECH</span>
                 </a>
             </div>
 
@@ -77,8 +78,64 @@
             <div class="main-content-inner">
                 {% block content %}{% endblock %}
             </div>
-            {% include 'phone_dialer.html' %}
+            {% if request.resolver_match.url_name != 'dialer' %}
+                {% include 'phone_dialer.html' %}
+            {% endif %}
         </main>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-bottom-nav" id="mobileBottomNav">
+            <a href="{% url 'webdialer:sms' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'sms' %}active{% endif %}">
+                <span class="material-icons-round">message</span>
+                <span>SMS</span>
+            </a>
+            <a href="{% url 'webdialer:history' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'history' %}active{% endif %}">
+                <span class="material-icons-round">history</span>
+                <span>History</span>
+            </a>
+            <a href="{% url 'webdialer:dialer' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'dialer' %}active{% endif %}">
+                <span class="material-icons-round">dialpad</span>
+                <span>Keypad</span>
+            </a>
+            <a href="{% url 'webdialer:account' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'account' %}active{% endif %}">
+                <span class="material-icons-round">account_circle</span>
+                <span>Account</span>
+            </a>
+        </nav>
+
+        <!-- Mobile Account Sub-Nav (Left Sidebar) -->
+        <aside class="mobile-account-nav" id="mobileAccountNav">
+            <div class="mobile-account-nav-header">
+                <h3>Account</h3>
+                <button class="mobile-account-close" id="mobileAccountClose">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <nav class="mobile-account-nav-links">
+                <a href="{% url 'webdialer:account' %}?tab=buy_credits" class="mobile-account-nav-link {% if active_tab == 'buy_credits' %}active{% endif %}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Buy Credits
+                </a>
+                <a href="{% url 'webdialer:account' %}?tab=balance_transfer" class="mobile-account-nav-link {% if active_tab == 'balance_transfer' %}active{% endif %}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                    Balance Transfer
+                </a>
+                <a href="{% url 'webdialer:account' %}?tab=transaction_history" class="mobile-account-nav-link {% if active_tab == 'transaction_history' %}active{% endif %}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+                    Transaction History
+                </a>
+                <a href="{% url 'webdialer:phone_numbers' %}" class="mobile-account-nav-link">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                    Phone Numbers
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Mobile Account Nav Overlay -->
+        <div class="mobile-account-overlay" id="mobileAccountOverlay"></div>
+
+        <!-- Mobile Phone Dialer Overlay -->
+        <div class="phone-dialer-overlay" id="phoneDialerOverlay"></div>
     </div>
 
     <!-- Notification Container -->

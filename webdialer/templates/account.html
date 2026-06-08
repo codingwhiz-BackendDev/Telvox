@@ -1,16 +1,10 @@
 {% extends 'dashboard_base.html' %}
 
 {% load static %}
-{% block title %}Account - Telvox Dashboard{% endblock %}
+{% block title %}Account - SAMAPPTECH Dashboard{% endblock %}
 
 {% block content %}
 <div class="account-container">
-    <div class="account-tabs">
-        <button class="tab-btn {% if active_tab == 'buy_credits' %}active{% endif %}" data-tab="buy_credits">Buy Credits</button>
-        <button class="tab-btn {% if active_tab == 'balance_transfer' %}active{% endif %}" data-tab="balance_transfer">Balance Transfer</button>
-        <button class="tab-btn {% if active_tab == 'transaction_history' %}active{% endif %}" data-tab="transaction_history">Transaction History</button>
-    </div>
-
     <div class="account-content">
         <!-- Buy Credits Tab -->
         <div class="tab-pane {% if active_tab == 'buy_credits' %}active{% endif %}" id="buy_credits">
