@@ -27,9 +27,10 @@ class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages')
     from_number = models.CharField(max_length=20)
     to_number = models.CharField(max_length=20)
-    content = models.TextField()
+    message = models.TextField()  # Changed from 'content' to 'message' to match code
     direction = models.CharField(max_length=10, choices=[('inbound', 'Inbound'), ('outbound', 'Outbound')])
-    timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='pending')  # Added status field
+    created_at = models.DateTimeField(auto_now_add=True)  # Changed from 'timestamp' to 'created_at'
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
@@ -37,15 +38,18 @@ class Message(models.Model):
 
 class CallLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='call_logs')
-    caller_number = models.CharField(max_length=20)
-    did_number = models.CharField(max_length=20)  # The virtual number that was called
-    call_type = models.CharField(max_length=10, choices=[('inbound', 'Inbound'), ('outbound', 'Outbound')])
-    duration = models.IntegerField(default=0)  # in seconds
-    timestamp = models.DateTimeField(auto_now_add=True)
+    from_number = models.CharField(max_length=20)  # Changed from caller_number
+    to_number = models.CharField(max_length=20)  # Changed from did_number
+    direction = models.CharField(max_length=10, choices=[('inbound', 'Inbound'), ('outbound', 'Outbound')])  # Changed from call_type
+    status = models.CharField(max_length=20, default='initiated')  # Added status field
+    duration = models.IntegerField(default=0, blank=True, null=True)  # in seconds
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Added cost field
+    telnyx_call_id = models.CharField(max_length=100, blank=True, null=True)  # Added telnyx_call_id field
+    created_at = models.DateTimeField(auto_now_add=True)  # Changed from timestamp
     recording_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.call_type} call to {self.did_number}"
+        return f"{self.direction} call to {self.to_number}"
 
 class CreditTransaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='credit_transactions')

@@ -14,15 +14,15 @@ class VirtualNumberAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ['user', 'from_number', 'to_number', 'direction', 'timestamp', 'is_read']
-    search_fields = ['from_number', 'to_number', 'content']
-    list_filter = ['direction', 'is_read', 'timestamp']
+    list_display = ['user', 'from_number', 'to_number', 'direction', 'status', 'created_at', 'is_read']
+    search_fields = ['from_number', 'to_number', 'message']
+    list_filter = ['direction', 'status', 'is_read', 'created_at']
 
 @admin.register(CallLog)
 class CallLogAdmin(admin.ModelAdmin):
-    list_display = ['user', 'caller_number', 'did_number', 'call_type', 'duration', 'timestamp']
-    search_fields = ['caller_number', 'did_number']
-    list_filter = ['call_type', 'timestamp']
+    list_display = ['user', 'from_number', 'to_number', 'direction', 'status', 'duration', 'cost', 'created_at']
+    search_fields = ['from_number', 'to_number', 'telnyx_call_id']
+    list_filter = ['direction', 'status', 'created_at']
 
 @admin.register(CreditTransaction)
 class CreditTransactionAdmin(admin.ModelAdmin):

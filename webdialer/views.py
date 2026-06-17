@@ -52,7 +52,7 @@ def sms_view(request):
     active_virtual_number = virtual_numbers.first().phone_number if virtual_numbers else None
     
     # Get all messages and group by conversation
-    messages = Message.objects.filter(user=user).order_by('-timestamp')
+    messages = Message.objects.filter(user=user).order_by('-created_at')
     conversations = []
     seen_numbers = set()
     
@@ -67,8 +67,8 @@ def sms_view(request):
             conversations.append({
                 'id': contact_number,
                 'contact_number': contact_number,
-                'last_message': msg.content,
-                'last_message_time': msg.timestamp
+                'last_message': msg.message,
+                'last_message_time': msg.created_at
             })
     
     active_conversation_id = request.GET.get('conversation')
@@ -81,7 +81,7 @@ def sms_view(request):
             user=user
         ).filter(
             Q(from_number=active_conversation_id) | Q(to_number=active_conversation_id)
-        ).order_by('timestamp')
+        ).order_by('created_at')
     
     context = {
         'user': user,
@@ -106,11 +106,11 @@ def history_view(request):
     
     if search_query:
         call_logs = call_logs.filter(
-            Q(caller_number__icontains=search_query) | 
-            Q(did_number__icontains=search_query)
+            Q(from_number__icontains=search_query) | 
+            Q(to_number__icontains=search_query)
         )
     
-    call_logs = call_logs.order_by('-timestamp')
+    call_logs = call_logs.order_by('-created_at')
     
     paginator = Paginator(call_logs, 20)
     page_number = request.GET.get('page', 1)
@@ -483,6 +483,97 @@ def fetch_available_numbers(country, number_type='mobile', region=None):
         traceback.print_exc()
         return []
 
+def send_telnyx_sms(from_number, to_number, message):
+    """Send SMS via Telnyx API"""
+    try:
+        url = 'https://api.telnyx.com/v2/messages'
+        headers = get_telnyx_headers()
+        
+        data = {
+            'from': from_number,
+            'to': to_number,
+            'text': message,
+            'type': 'text'
+        }
+        
+        print(f"Sending SMS via Telnyx: from={from_number}, to={to_number}")
+        
+        response = requests.post(url, headers=headers, json=data, timeout=10)
+        
+        print(f"Telnyx SMS API response status: {response.status_code}")
+        
+        if response.status_code in [200, 201, 202]:
+            response_data = response.json()
+            message_id = response_data.get('data', {}).get('id')
+            print(f"SMS sent successfully: {message_id}")
+            return response_data
+        else:
+            error_detail = response.text
+            try:
+                error_json = response.json()
+                error_detail = error_json.get('errors', [{}])[0].get('detail', error_detail)
+            except:
+                pass
+            print(f"Telnyx SMS API error: {response.status_code} - {error_detail}")
+            return None
+    except requests.exceptions.Timeout:
+        print("Telnyx SMS API timeout")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"Telnyx SMS API request error: {e}")
+        return None
+    except Exception as e:
+        print(f"Error sending SMS via Telnyx: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+def initiate_telnyx_call(from_number, to_number):
+    """Initiate a voice call via Telnyx API"""
+    try:
+        url = 'https://api.telnyx.com/v2/calls'
+        headers = get_telnyx_headers()
+        
+        data = {
+            'from': from_number,
+            'to': to_number,
+            'connection_id': settings.TELNYX_CONNECTION_ID if hasattr(settings, 'TELNYX_CONNECTION_ID') else '',
+            'webhook_url': f"{settings.SITE_URL}/webdialer/call-webhook/"
+        }
+        
+        print(f"Initiating call via Telnyx: from={from_number}, to={to_number}")
+        print(f"Connection ID: {data.get('connection_id', 'Not set')}")
+        
+        response = requests.post(url, headers=headers, json=data, timeout=10)
+        
+        print(f"Telnyx Call API response status: {response.status_code}")
+        
+        if response.status_code in [200, 201, 202]:
+            response_data = response.json()
+            call_id = response_data.get('data', {}).get('id')
+            print(f"Call initiated successfully: {call_id}")
+            return response_data
+        else:
+            error_detail = response.text
+            try:
+                error_json = response.json()
+                error_detail = error_json.get('errors', [{}])[0].get('detail', error_detail)
+            except:
+                pass
+            print(f"Telnyx Call API error: {response.status_code} - {error_detail}")
+            return None
+    except requests.exceptions.Timeout:
+        print("Telnyx Call API timeout")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"Telnyx Call API request error: {e}")
+        return None
+    except Exception as e:
+        print(f"Error initiating call via Telnyx: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 def purchase_telnyx_number(phone_number):
     """Purchase a phone number from Telnyx"""
     try:
@@ -507,6 +598,333 @@ def purchase_telnyx_number(phone_number):
     except Exception as e:
         print(f"Error purchasing number from Telnyx: {e}")
         return None
+
+@login_required
+def send_sms_view(request):
+    """View for sending SMS messages"""
+    user = request.user
+    try:
+        profile = user.userprofile
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(user=user, balance=0.00)
+    
+    # Get user's virtual numbers
+    virtual_numbers = VirtualNumber.objects.filter(user=user, status='active')
+    
+    if request.method == 'POST':
+        from_number = request.POST.get('from_number')
+        to_number = request.POST.get('to_number')
+        message = request.POST.get('message')
+        
+        if not from_number or not to_number or not message:
+            return JsonResponse({'error': 'All fields are required'}, status=400)
+        
+        # Validate phone number format
+        if not to_number.startswith('+'):
+            return JsonResponse({'error': 'Phone number must include country code (e.g., +1234567890)'}, status=400)
+        
+        # Calculate SMS cost (assuming $0.01 per SMS segment, 160 chars per segment)
+        message_length = len(message)
+        segments = max(1, (message_length + 159) // 160)  # Round up to nearest segment
+        sms_cost = Decimal('0.01') * Decimal(str(segments))
+        
+        # Refresh profile from database to get latest balance
+        profile.refresh_from_db()
+        
+        # Check if user has sufficient balance
+        if profile.balance < sms_cost:
+            return JsonResponse({'error': f'Insufficient balance. You need ${sms_cost:.2f} but have ${profile.balance:.2f}'}, status=400)
+        
+        # Send SMS via Telnyx
+        telnyx_response = send_telnyx_sms(from_number, to_number, message)
+        
+        if telnyx_response:
+            # Refresh profile again and deduct balance
+            profile.refresh_from_db()
+            profile.balance -= sms_cost
+            profile.save()
+            
+            # Create message record
+            Message.objects.create(
+                user=user,
+                from_number=from_number,
+                to_number=to_number,
+                message=message,
+                direction='outbound',
+                status='sent'
+            )
+            
+            # Create transaction record
+            CreditTransaction.objects.create(
+                user=user,
+                transaction_type='debit',
+                amount=sms_cost,
+                description=f'SMS sent to {to_number}',
+                balance_after=profile.balance
+            )
+            
+            return JsonResponse({'success': True, 'message': 'SMS sent successfully', 'cost': float(sms_cost), 'segments': segments})
+        else:
+            return JsonResponse({'error': 'Failed to send SMS via Telnyx. Please check your API credentials and try again.'}, status=500)
+    
+    context = {
+        'user': user,
+        'virtual_numbers': virtual_numbers,
+        'balance': profile.balance
+    }
+    return render(request, 'send_sms.html', context)
+
+@login_required
+def voice_call_view(request):
+    """View for making voice calls"""
+    user = request.user
+    try:
+        profile = user.userprofile
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(user=user, balance=0.00)
+    
+    # Get user's virtual numbers
+    virtual_numbers = VirtualNumber.objects.filter(user=user, status='active')
+    
+    if request.method == 'POST':
+        from_number = request.POST.get('from_number')
+        to_number = request.POST.get('to_number')
+        
+        if not from_number or not to_number:
+            return JsonResponse({'error': 'Both numbers are required'}, status=400)
+        
+        # Validate phone number format
+        if not to_number.startswith('+'):
+            return JsonResponse({'error': 'Phone number must include country code (e.g., +1234567890)'}, status=400)
+        
+        # Calculate call cost (assuming $0.02 per minute)
+        call_cost_per_minute = Decimal('0.02')
+        minimum_charge = call_cost_per_minute  # Minimum 1 minute charge
+        
+        # Refresh profile from database to get latest balance
+        profile.refresh_from_db()
+        
+        # Check if user has sufficient balance (minimum 1 minute)
+        if profile.balance < minimum_charge:
+            return JsonResponse({'error': f'Insufficient balance. You need at least ${minimum_charge:.2f} for 1 minute call'}, status=400)
+        
+        # Initiate call via Telnyx
+        telnyx_response = initiate_telnyx_call(from_number, to_number)
+        
+        if telnyx_response:
+            call_id = telnyx_response.get('data', {}).get('id')
+            
+            # Refresh profile again and deduct balance
+            profile.refresh_from_db()
+            profile.balance -= minimum_charge
+            profile.save()
+            
+            # Create call log record
+            CallLog.objects.create(
+                user=user,
+                from_number=from_number,
+                to_number=to_number,
+                direction='outbound',
+                status='initiated',
+                telnyx_call_id=call_id,
+                cost=minimum_charge  # Initial cost, will be updated after call ends
+            )
+            
+            # Create transaction record
+            CreditTransaction.objects.create(
+                user=user,
+                transaction_type='debit',
+                amount=minimum_charge,
+                description=f'Voice call initiated to {to_number}',
+                balance_after=profile.balance
+            )
+            
+            return JsonResponse({'success': True, 'message': 'Call initiated successfully', 'call_id': call_id, 'cost': float(minimum_charge)})
+        else:
+            return JsonResponse({'error': 'Failed to initiate call via Telnyx. Please check your API credentials and connection settings.'}, status=500)
+    
+    context = {
+        'user': user,
+        'virtual_numbers': virtual_numbers,
+        'balance': profile.balance
+    }
+    return render(request, 'voice_call.html', context)
+
+@csrf_exempt
+def sms_webhook_view(request):
+    """Webhook endpoint for Telnyx inbound SMS"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            # Telnyx sends SMS data in different formats depending on webhook type
+            payload = data.get('data', {}).get('payload', {})
+            
+            # Try different possible field names for phone numbers
+            from_number = payload.get('from', payload.get('from_number', {}))
+            to_number = payload.get('to', payload.get('to_number', {}))
+            
+            # Try different possible field names for message content
+            message = payload.get('text', payload.get('content', payload.get('body', '')))
+            
+            # Handle nested phone number objects
+            if isinstance(from_number, dict):
+                from_number = from_number.get('phone_number', from_number.get('phone_number', ''))
+            if isinstance(to_number, dict):
+                to_number = to_number.get('phone_number', to_number.get('phone_number', ''))
+            
+            # Also check if numbers are directly in the payload
+            if not from_number:
+                from_number = data.get('data', {}).get('payload', {}).get('from', {}).get('phone_number', '')
+            if not to_number:
+                to_number = data.get('data', {}).get('payload', {}).get('to', {}).get('phone_number', '')
+            
+            print(f"SMS webhook received: from={from_number}, to={to_number}, message={message}")
+            
+            if from_number and to_number and message:
+                # Find the user who owns the virtual number
+                virtual_number = VirtualNumber.objects.filter(phone_number=to_number, status='active').first()
+                if virtual_number:
+                    # Create inbound message record
+                    Message.objects.create(
+                        user=virtual_number.user,
+                        from_number=from_number,
+                        to_number=to_number,
+                        message=message,
+                        direction='inbound',
+                        status='received'
+                    )
+                    print(f"Created inbound message for user {virtual_number.user.username}")
+                else:
+                    print(f"Virtual number {to_number} not found")
+            
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            print(f"Error processing SMS webhook: {e}")
+            import traceback
+            traceback.print_exc()
+            return JsonResponse({'status': 'error'}, status=500)
+    
+    return JsonResponse({'status': 'invalid method'}, status=405)
+
+@csrf_exempt
+def call_webhook_view(request):
+    """Webhook endpoint for Telnyx call events (both inbound and outbound)"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            event_type = data.get('data', {}).get('event_type', '')
+            payload = data.get('data', {}).get('payload', {})
+            
+            print(f"Call webhook received: event_type={event_type}")
+            
+            # Handle inbound call initiation
+            if event_type == 'call.initiated':
+                from_number = payload.get('from', {})
+                to_number = payload.get('to', {})
+                call_id = payload.get('call_id')
+                
+                # Handle nested phone number objects
+                if isinstance(from_number, dict):
+                    from_number = from_number.get('phone_number', '')
+                if isinstance(to_number, dict):
+                    to_number = to_number.get('phone_number', '')
+                
+                print(f"Inbound call initiated: from={from_number}, to={to_number}, call_id={call_id}")
+                
+                if from_number and to_number:
+                    # Find the user who owns the virtual number
+                    virtual_number = VirtualNumber.objects.filter(phone_number=to_number, status='active').first()
+                    if virtual_number:
+                        # Create inbound call log
+                        CallLog.objects.create(
+                            user=virtual_number.user,
+                            from_number=from_number,
+                            to_number=to_number,
+                            direction='inbound',
+                            status='ringing',
+                            telnyx_call_id=call_id
+                        )
+                        print(f"Created inbound call log for user {virtual_number.user.username}")
+            
+            # Handle call status updates (for outbound calls)
+            call_id = payload.get('call_id')
+            call_status = payload.get('call_status')
+            call_duration = payload.get('call_duration')
+            
+            if call_id and call_status:
+                print(f"Call status update: call_id={call_id}, status={call_status}, duration={call_duration}")
+                
+                # Update call log with new status
+                call_log = CallLog.objects.filter(telnyx_call_id=call_id).first()
+                if call_log:
+                    call_log.status = call_status.lower()
+                    if call_duration:
+                        call_log.duration = int(call_duration)
+                        # Calculate actual cost based on duration (only for outbound calls)
+                        if call_log.direction == 'outbound':
+                            cost_per_minute = Decimal('0.02')
+                            actual_cost = cost_per_minute * Decimal(str(call_duration))
+                            initial_cost = call_log.cost
+                            cost_difference = actual_cost - initial_cost
+                            
+                            # Update call log cost
+                            call_log.cost = actual_cost
+                            
+                            # If actual cost is different from initial cost, adjust user balance
+                            if cost_difference != 0:
+                                user = call_log.user
+                                try:
+                                    profile = user.userprofile
+                                    profile.balance -= cost_difference  # Negative if refund needed
+                                    profile.save()
+                                    
+                                    # Create transaction record for adjustment
+                                    CreditTransaction.objects.create(
+                                        user=user,
+                                        transaction_type='debit' if cost_difference > 0 else 'credit',
+                                        amount=abs(cost_difference),
+                                        description=f'Call cost adjustment for {call_log.to_number}',
+                                        balance_after=profile.balance
+                                    )
+                                    print(f"Adjusted user balance by ${cost_difference:.2f}")
+                                except UserProfile.DoesNotExist:
+                                    print(f"User profile not found for balance adjustment")
+                    
+                    call_log.save()
+                    print(f"Updated call log: {call_log.id}")
+            
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            print(f"Error processing call webhook: {e}")
+            import traceback
+            traceback.print_exc()
+            return JsonResponse({'status': 'error'}, status=500)
+    
+    return JsonResponse({'status': 'invalid method'}, status=405)
+
+@login_required
+def sms_history_view(request):
+    """View for SMS history"""
+    user = request.user
+    messages = Message.objects.filter(user=user).order_by('-created_at')
+    
+    context = {
+        'user': user,
+        'messages': messages
+    }
+    return render(request, 'sms_history.html', context)
+
+@login_required
+def call_history_view(request):
+    """View for call history"""
+    user = request.user
+    calls = CallLog.objects.filter(user=user).order_by('-created_at')
+    
+    context = {
+        'user': user,
+        'calls': calls
+    }
+    return render(request, 'call_history.html', context)
 
 @login_required
 def buy_phone_number_view(request):

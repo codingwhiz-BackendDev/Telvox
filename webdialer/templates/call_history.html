@@ -1,0 +1,330 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Call History - SAMAPPTECH Dashboard{% endblock %}
+
+{% block content %}
+<div class="call-history-container">
+    <div class="call-history-header">
+        <h1>Call History</h1>
+        <a href="{% url 'webdialer:voice_call' %}" class="btn-primary">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Make Call
+        </a>
+    </div>
+
+    {% if calls %}
+        <div class="calls-grid">
+            {% for call in calls %}
+                <div class="call-card {% if call.direction == 'outbound' %}outbound{% else %}inbound{% endif %}">
+                    <div class="call-header">
+                        <div class="call-direction">
+                            {% if call.direction == 'outbound' %}
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                                <span>Outbound</span>
+                            {% else %}
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                                <span>Inbound</span>
+                            {% endif %}
+                        </div>
+                        <div class="call-time">{{ call.created_at|date:"M d, Y H:i" }}</div>
+                    </div>
+                    <div class="call-numbers">
+                        <div class="number-pair">
+                            <span class="label">From:</span>
+                            <span class="number">{{ call.from_number }}</span>
+                        </div>
+                        <div class="number-pair">
+                            <span class="label">To:</span>
+                            <span class="number">{{ call.to_number }}</span>
+                        </div>
+                    </div>
+                    <div class="call-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Duration:</span>
+                            <span class="detail-value">{% if call.duration %}{{ call.duration }} min{% else %}--{% endif %}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Cost:</span>
+                            <span class="detail-value">{% if call.cost %}${{ call.cost|floatformat:2 }}{% else %}--{% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="call-footer">
+                        <span class="status-badge status-{{ call.status }}">{{ call.status|title }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <svg width="96" height="96" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <h3>No calls yet</h3>
+            <p>Start making calls to see your call history here.</p>
+            <a href="{% url 'webdialer:voice_call' %}" class="btn-primary">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.0 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Make Your First Call
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.call-history-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.call-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.call-history-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.calls-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.call-card {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.call-card:nth-child(1) { animation-delay: 0.1s; }
+.call-card:nth-child(2) { animation-delay: 0.2s; }
+.call-card:nth-child(3) { animation-delay: 0.3s; }
+.call-card:nth-child(4) { animation-delay: 0.4s; }
+.call-card:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.call-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.call-card.outbound {
+    border-left: 4px solid #667eea;
+}
+
+.call-card.inbound {
+    border-left: 4px solid #10b981;
+}
+
+.call-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.call-direction {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.call-card.outbound .call-direction {
+    color: #667eea;
+}
+
+.call-card.inbound .call-direction {
+    color: #10b981;
+}
+
+.call-time {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.call-numbers {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.number-pair {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.number-pair .label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.number-pair .number {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.call-details {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 16px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.detail-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.call-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-completed {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.status-initiated {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+}
+
+.status-failed {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.status-in-progress {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.status-missed {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.empty-state svg {
+    color: #cbd5e1;
+    margin-bottom: 24px;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.empty-state .btn-primary {
+    display: inline-flex;
+}
+</style>
+{% endblock %}

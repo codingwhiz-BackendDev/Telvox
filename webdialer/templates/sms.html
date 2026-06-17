@@ -39,8 +39,8 @@
             <div class="chat-messages">
                 {% for msg in messages %}
                     <div class="message-bubble {% if msg.direction == 'inbound' %}inbound{% else %}outbound{% endif %}">
-                        <div class="message-content">{{ msg.content }}</div>
-                        <div class="message-time">{{ msg.timestamp|date:"H:i" }}</div>
+                        <div class="message-content">{{ msg.message }}</div>
+                        <div class="message-time">{{ msg.created_at|date:"H:i" }}</div>
                     </div>
                 {% endfor %}
             </div>
