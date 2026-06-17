@@ -439,6 +439,7 @@ def fetch_available_numbers(country, number_type='mobile', region=None):
         telnyx_country = country_info['telnyx_code']
         phone_code = country_info['phone_code']
         
+        # Use available_phone_numbers endpoint
         url = 'https://api.telnyx.com/v2/available_phone_numbers'
         headers = get_telnyx_headers()
         
@@ -465,15 +466,31 @@ def fetch_available_numbers(country, number_type='mobile', region=None):
             data = response.json()
             numbers = data.get('data', [])
             print(f"Telnyx returned {len(numbers)} numbers")
+            print(f"Sample number data: {numbers[0] if numbers else 'None'}")
             
-            # Add country code to each number if not already present
+            # Process numbers - search endpoint returns actual unmasked numbers
+            processed_numbers = []
             for num in numbers:
+                # Get phone number ID for purchasing
+                phone_number_id = num.get('id', '')
+                
+                # Get the actual phone number
                 phone_number = num.get('phone_number', '')
+                
                 # Only add country code if number doesn't already have one
                 if phone_number and not phone_number.startswith('+'):
-                    num['phone_number'] = f"{phone_code}{phone_number}"
-                print(f"Number: {num.get('phone_number')}, Region: {num.get('region', 'N/A')}")
-            return numbers
+                    phone_number = f"{phone_code}{phone_number}"
+                
+                processed_num = {
+                    'phone_number': phone_number,
+                    'phone_number_id': phone_number_id,  # Store ID for purchasing
+                    'region': num.get('region', ''),
+                    'locality': num.get('locality', num.get('region', ''))
+                }
+                processed_numbers.append(processed_num)
+                print(f"Processed Number: {phone_number}, ID: {phone_number_id}, Region: {num.get('region', 'N/A')}")
+            
+            return processed_numbers
         else:
             print(f"Telnyx API error: {response.status_code} - {response.text}")
             return []
@@ -574,19 +591,76 @@ def initiate_telnyx_call(from_number, to_number):
         traceback.print_exc()
         return None
 
-def purchase_telnyx_number(phone_number):
-    """Purchase a phone number from Telnyx"""
+def reserve_telnyx_number(phone_number):
+    """Reserve a phone number from Telnyx to get the actual unmasked number"""
     try:
+        # According to Telnyx docs, you can reserve by including the number in a number order
+        # The number will be reserved and you'll get the actual number in the response
         url = 'https://api.telnyx.com/v2/number_orders'
         headers = get_telnyx_headers()
         
         data = {
             'phone_numbers': [
                 {
-                    'phone_number': phone_number,
+                    'phone_number': phone_number
                 }
             ]
         }
+        
+        print(f"Reserving phone number via order: {phone_number}")
+        response = requests.post(url, headers=headers, json=data, timeout=10)
+        
+        if response.status_code in [200, 201]:
+            result = response.json()
+            # Get the actual phone number from the order response
+            ordered_numbers = result.get('data', {}).get('phone_numbers', [])
+            if ordered_numbers:
+                actual_number = ordered_numbers[0].get('phone_number', phone_number)
+                print(f"Reserved actual phone number: {actual_number}")
+                return actual_number
+            return phone_number
+        else:
+            print(f"Telnyx reservation error: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        print(f"Error reserving number from Telnyx: {e}")
+        return None
+
+def purchase_telnyx_number(phone_number, phone_number_id=None):
+    """Purchase a phone number from Telnyx"""
+    try:
+        url = 'https://api.telnyx.com/v2/number_orders'
+        headers = get_telnyx_headers()
+        
+        # If phone number is masked, try to reserve it first
+        if phone_number and ('-' in phone_number or '*' in phone_number):
+            print(f"Phone number is masked, attempting to reserve: {phone_number}")
+            actual_number = reserve_telnyx_number(phone_number)
+            if actual_number:
+                phone_number = actual_number
+            else:
+                print("Failed to reserve masked phone number")
+                return None
+        
+        # Use phone_number_id if available, otherwise use phone_number
+        if phone_number_id:
+            data = {
+                'phone_numbers': [
+                    {
+                        'phone_number_id': phone_number_id,
+                    }
+                ]
+            }
+            print(f"Purchasing number using ID: {phone_number_id}")
+        else:
+            data = {
+                'phone_numbers': [
+                    {
+                        'phone_number': phone_number,
+                    }
+                ]
+            }
+            print(f"Purchasing number using phone number: {phone_number}")
         
         response = requests.post(url, headers=headers, json=data, timeout=10)
         
@@ -1022,6 +1096,7 @@ def purchase_phone_number(request):
             return JsonResponse({'error': 'User profile not found'}, status=404)
         
         phone_number = request.POST.get('phone_number')
+        phone_number_id = request.POST.get('phone_number_id', '')
         country = request.POST.get('country')
         plan_type = request.POST.get('plan_type', 'monthly')
         
@@ -1048,7 +1123,7 @@ def purchase_phone_number(request):
         
         if not inventory_number:
             # Purchase from Telnyx
-            telnyx_response = purchase_telnyx_number(phone_number)
+            telnyx_response = purchase_telnyx_number(phone_number, phone_number_id)
             if not telnyx_response:
                 return JsonResponse({'error': 'Failed to purchase number from Telnyx'}, status=500)
             
