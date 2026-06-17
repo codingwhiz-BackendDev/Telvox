@@ -209,3 +209,6 @@ DEFAULT_FROM_EMAIL = 'noreply@samapptech.com'
 PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY', '')  # Add your secret key to .env file
 PAYSTACK_CALLBACK_URL = os.getenv('PAYSTACK_CALLBACK_URL', 'http://127.0.0.1:8000/webdialer/billing/verify/')
 PAYSTACK_WEBHOOK_URL = os.getenv('PAYSTACK_WEBHOOK_URL', 'http://127.0.0.1:8000/webdialer/billing/webhook/')
+
+# Telnyx Configuration
+TELNYX_API_KEY = os.getenv('TELNYX_API_KEY', '')
