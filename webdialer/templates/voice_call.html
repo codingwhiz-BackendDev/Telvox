@@ -404,22 +404,96 @@
 }
 
 @media (max-width: 768px) {
+    .voice-call-container {
+        padding: 20px 10px;
+    }
+    
     .voice-call-content {
         grid-template-columns: 1fr;
+        padding: 24px 16px;
     }
     
     .voice-call-header {
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
         text-align: center;
     }
     
+    .voice-call-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .balance-badge {
+        font-size: 0.9rem;
+    }
+    
+    .dialer-card {
+        padding: 20px 16px;
+    }
+    
+    .dialer-display {
+        padding: 16px;
+        font-size: 1.25rem;
+    }
+    
     .dialer-grid {
-        gap: 12px;
+        gap: 10px;
     }
     
     .dialer-btn {
         font-size: 1.5rem;
+        padding: 16px;
+    }
+    
+    .dialer-actions {
+        gap: 12px;
+    }
+    
+    .btn-call {
+        padding: 16px 24px;
+        font-size: 1rem;
+    }
+    
+    .cost-estimate {
+        padding: 12px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .cost-amount {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .voice-call-container {
+        padding: 15px 8px;
+    }
+    
+    .voice-call-content {
+        padding: 20px 12px;
+    }
+    
+    .dialer-card {
+        padding: 16px 12px;
+    }
+    
+    .voice-call-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .dialer-display {
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+    
+    .dialer-btn {
+        font-size: 1.25rem;
+        padding: 12px;
+    }
+    
+    .btn-call {
+        padding: 14px 20px;
+        font-size: 0.95rem;
     }
 }
 </style>

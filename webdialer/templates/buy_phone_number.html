@@ -851,6 +851,142 @@
 .btn-purchase svg {
     flex-shrink: 0;
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .buy-phone-container {
+        max-width: 100%;
+        padding: 20px 10px;
+        min-height: auto;
+    }
+    
+    .buy-phone-content {
+        padding: 24px 16px;
+        border-radius: 16px;
+    }
+    
+    .page-header {
+        margin-bottom: 32px;
+    }
+    
+    .page-title {
+        font-size: 1.75rem;
+    }
+    
+    .page-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .country-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .country-card {
+        padding: 16px;
+    }
+    
+    .country-flag {
+        width: 60px;
+        height: 45px;
+    }
+    
+    .country-name {
+        font-size: 0.9rem;
+    }
+    
+    .country-code {
+        font-size: 0.8rem;
+    }
+    
+    .type-grid,
+    .region-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .type-option,
+    .region-option {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+    
+    .numbers-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .number-card {
+        padding: 16px;
+    }
+    
+    .number-card .phone-number {
+        font-size: 1.1rem;
+    }
+    
+    .plans-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .plan-card {
+        padding: 24px 20px;
+    }
+    
+    .plan-price {
+        font-size: 2rem;
+    }
+    
+    .order-summary {
+        padding: 20px;
+    }
+    
+    .summary-row {
+        font-size: 0.9rem;
+    }
+    
+    .total-amount {
+        font-size: 1.5rem;
+    }
+    
+    .btn-purchase {
+        width: 100%;
+        padding: 16px;
+        font-size: 1rem;
+    }
+    
+    .section-label {
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+    }
+    
+    .selection-section {
+        margin-bottom: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .country-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .type-grid,
+    .region-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .buy-phone-content {
+        padding: 20px 12px;
+    }
+    
+    .plan-card {
+        padding: 20px 16px;
+    }
+}
 </style>
 
 <script>
