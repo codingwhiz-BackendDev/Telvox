@@ -77,7 +77,7 @@
                 />
               </svg>
             </div>
-            <span class="auth-logo-name">Tel<span>vox</span></span>
+            <span class="auth-logo-name">SAMAP<span>PTECH</span></span>
           </a>
 
           {% if messages %}
@@ -94,8 +94,76 @@
             >
             <h1 class="auth-title">Create your account</h1>
             <p class="auth-sub">
-              Sign up with Google and pick your first number from $0.99/month.
+              Sign up with email or Google and pick your first number from $0.99/month.
             </p>
+          </div>
+
+          <form method="POST" action="{% url 'register' %}" class="auth-form">
+            {% csrf_token %}
+            <div class="auth-form-group">
+              <label for="first_name" class="auth-label">First Name</label>
+              <input
+                type="text"
+                id="first_name"
+                name="first_name"
+                class="auth-input"
+                required
+                placeholder="John"
+              />
+            </div>
+            <div class="auth-form-group">
+              <label for="last_name" class="auth-label">Last Name</label>
+              <input
+                type="text"
+                id="last_name"
+                name="last_name"
+                class="auth-input"
+                required
+                placeholder="Doe"
+              />
+            </div>
+            <div class="auth-form-group">
+              <label for="email" class="auth-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="auth-input"
+                required
+                placeholder="john@example.com"
+              />
+            </div>
+            <div class="auth-form-group">
+              <label for="password" class="auth-label">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="auth-input"
+                required
+                placeholder="Min. 8 characters"
+                minlength="8"
+              />
+            </div>
+            <div class="auth-form-group">
+              <label for="confirm_password" class="auth-label">Confirm Password</label>
+              <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                class="auth-input"
+                required
+                placeholder="Min. 8 characters"
+                minlength="8"
+              />
+            </div>
+            <button type="submit" class="btn-primary has-ripple">
+              Create Account
+            </button>
+          </form>
+
+          <div class="auth-divider">
+            <span>OR</span>
           </div>
 
           <a

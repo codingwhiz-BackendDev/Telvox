@@ -31,7 +31,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "*"
-    
 ]
 
 
@@ -198,6 +197,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Paystack Payment Configuration
 PAYSTACK_PUBLIC_KEY = os.getenv('PAYSTACK_PUBLIC_KEY', 'pk_test_b8445146a7887bbb46ac3f991cca0bab6bce663a')
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'noreply@samapptech.com'
 PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY', '')  # Add your secret key to .env file
-PAYSTACK_CALLBACK_URL = os.getenv('PAYSTACK_CALLBACK_URL', 'https://9838-197-211-63-84.ngrok-free.app/webdialer/billing/verify/')
-PAYSTACK_WEBHOOK_URL = os.getenv('PAYSTACK_WEBHOOK_URL', 'https://9838-197-211-63-84.ngrok-free.app/webdialer/billing/webhook/')
+PAYSTACK_CALLBACK_URL = os.getenv('PAYSTACK_CALLBACK_URL', 'http://127.0.0.1:8000/webdialer/billing/verify/')
+PAYSTACK_WEBHOOK_URL = os.getenv('PAYSTACK_WEBHOOK_URL', 'http://127.0.0.1:8000/webdialer/billing/webhook/')
