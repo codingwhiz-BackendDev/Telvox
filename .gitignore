@@ -1,4 +1,53 @@
-db.sqlite3
-.env
+# Python
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Django
 *.pyc
+db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+staticfiles/
+
+# Environment variables - NEVER commit these!
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+venv/
+env/
+.venv/
+workon
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Media files uploaded by users (manage separately)
+media/
+
+# cPanel
+*.bak
