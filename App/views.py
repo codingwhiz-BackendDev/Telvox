@@ -14,6 +14,11 @@ from django.contrib.auth.hashers import make_password
 from .models import UserProfile
 from .tokens import email_verification_token, password_reset_token
 
+
+def health(request):
+    return HttpResponse("ok")
+
+    
 def index(request):
     return render(request, 'index.html')
 
