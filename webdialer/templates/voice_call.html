@@ -1,0 +1,681 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Voice Call - SAMAPPTECH Dashboard{% endblock %}
+
+{% block content %}
+<div id="notificationContainer"></div>
+<div class="voice-call-container">
+    <div class="voice-call-header">
+        <h1>Voice Call</h1>
+        <div class="balance-badge">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            Balance: ${{ balance|floatformat:2 }}
+        </div>
+    </div>
+
+    <div class="voice-call-content">
+        <div class="dialer-card">
+            <form id="callForm">
+                {% csrf_token %}
+            <div class="dialer-display">
+                <input type="tel" id="toNumber" placeholder="Enter phone number" readonly>
+            </div>
+
+            <div class="dialer-grid">
+                <button class="dialer-btn" data-digit="1">1</button>
+                <button class="dialer-btn" data-digit="2">2<span class="sub-text">ABC</span></button>
+                <button class="dialer-btn" data-digit="3">3<span class="sub-text">DEF</span></button>
+                <button class="dialer-btn" data-digit="4">4<span class="sub-text">GHI</span></button>
+                <button class="dialer-btn" data-digit="5">5<span class="sub-text">JKL</span></button>
+                <button class="dialer-btn" data-digit="6">6<span class="sub-text">MNO</span></button>
+                <button class="dialer-btn" data-digit="7">7<span class="sub-text">PQRS</span></button>
+                <button class="dialer-btn" data-digit="8">8<span class="sub-text">TUV</span></button>
+                <button class="dialer-btn" data-digit="9">9<span class="sub-text">WXYZ</span></button>
+                <button class="dialer-btn" data-digit="*">*</button>
+                <button class="dialer-btn" data-digit="0">0<span class="sub-text">+</span></button>
+                <button class="dialer-btn" data-digit="#">#</button>
+            </div>
+
+            <div class="dialer-actions">
+                <button class="btn-call" id="callBtn">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Call
+                </button>
+                <button class="btn-delete" id="deleteBtn">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+                </button>
+            </div>
+            </form>
+        </div>
+
+        <div class="call-settings-card">
+            <div class="form-group">
+                <label>
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Your Number
+                </label>
+                <select name="from_number" id="fromNumber" required>
+                    <option value="">Select your number</option>
+                    {% for number in virtual_numbers %}
+                        <option value="{{ number.phone_number }}">{{ number.phone_number }} ({{ number.country }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="info-card">
+                <h3>Call Pricing</h3>
+                <ul>
+                    <li>$0.02 per minute</li>
+                    <li>Minimum charge: 1 minute</li>
+                    <li>Cost deducted from wallet balance</li>
+                    <li>International rates may vary</li>
+                </ul>
+            </div>
+
+            <div class="cost-estimate">
+                <span>Cost per minute:</span>
+                <span class="cost-amount">$0.02</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.voice-call-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.voice-call-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.voice-call-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.balance-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.voice-call-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+}
+
+.dialer-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dialer-display {
+    margin-bottom: 32px;
+}
+
+.dialer-display input {
+    width: 100%;
+    padding: 20px 24px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    border: 3px solid #e2e8f0;
+    border-radius: 16px;
+    background: #f8fafc;
+    color: #1a1a2e;
+    letter-spacing: 2px;
+}
+
+.dialer-display input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.dialer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.dialer-btn {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.dialer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.dialer-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    border-color: #667eea;
+}
+
+.dialer-btn:hover::before {
+    opacity: 0.1;
+}
+
+.dialer-btn:active {
+    transform: scale(0.95);
+}
+
+.dialer-btn .sub-text {
+    font-size: 0.5rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 2px;
+    letter-spacing: 1px;
+}
+
+.dialer-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-call {
+    flex: 1;
+    padding: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-call:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.btn-call:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-delete {
+    width: 60px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-delete:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.call-settings-card {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.form-group label svg {
+    color: #667eea;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+}
+
+.info-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-card li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #4a5568;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-card li:before {
+    content: '✓';
+    color: #10b981;
+    font-weight: 700;
+}
+
+.info-card li:last-child {
+    border-bottom: none;
+}
+
+.cost-estimate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+.cost-amount {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #667eea;
+}
+
+@media (max-width: 768px) {
+    .voice-call-container {
+        padding: 20px 10px;
+    }
+    
+    .voice-call-content {
+        grid-template-columns: 1fr;
+        padding: 24px 16px;
+    }
+    
+    .voice-call-header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+    
+    .voice-call-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .balance-badge {
+        font-size: 0.9rem;
+    }
+    
+    .dialer-card {
+        padding: 20px 16px;
+    }
+    
+    .dialer-display {
+        padding: 16px;
+        font-size: 1.25rem;
+    }
+    
+    .dialer-grid {
+        gap: 10px;
+    }
+    
+    .dialer-btn {
+        font-size: 1.5rem;
+        padding: 16px;
+    }
+    
+    .dialer-actions {
+        gap: 12px;
+    }
+    
+    .btn-call {
+        padding: 16px 24px;
+        font-size: 1rem;
+    }
+    
+    .cost-estimate {
+        padding: 12px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .cost-amount {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .voice-call-container {
+        padding: 15px 8px;
+    }
+    
+    .voice-call-content {
+        padding: 20px 12px;
+    }
+    
+    .dialer-card {
+        padding: 16px 12px;
+    }
+    
+    .voice-call-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .dialer-display {
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+    
+    .dialer-btn {
+        font-size: 1.25rem;
+        padding: 12px;
+    }
+    
+    .btn-call {
+        padding: 14px 20px;
+        font-size: 0.95rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toNumberInput = document.getElementById('toNumber');
+    const fromNumberSelect = document.getElementById('fromNumber');
+    const dialerBtns = document.querySelectorAll('.dialer-btn');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const callBtn = document.getElementById('callBtn');
+    
+    // Notification system
+    function showNotification(type, title, message, duration = 5000) {
+        const container = document.getElementById('notificationContainer');
+        if (!container) {
+            console.error('Notification container not found');
+            return;
+        }
+        
+        container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: auto;
+            bottom: auto;
+            z-index: 9999999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            width: auto;
+            max-width: 400px;
+        `;
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        notification.style.cssText = `
+            min-width: 300px;
+            max-width: 400px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: #151a2d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            color: #ffffff;
+            margin-bottom: 0;
+            z-index: 9999999;
+            pointer-events: auto;
+            width: 100%;
+            box-sizing: border-box;
+        `;
+        
+        const icons = {
+            success: '<svg width="24" height="24" fill="none" stroke="#10b981" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>',
+            error: '<svg width="24" height="24" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+            warning: '<svg width="24" height="24" fill="none" stroke="#f59e0b" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+            info: '<svg width="24" height="24" fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+        };
+        
+        notification.innerHTML = `
+            <div class="notification-icon" style="width: 24px; height: 24px; flex-shrink: 0;">${icons[type] || icons.info}</div>
+            <div class="notification-content" style="flex: 1;">
+                <div class="notification-title" style="font-weight: 600; font-size: 0.95rem; color: #ffffff; margin-bottom: 4px;">${title}</div>
+                <div class="notification-message" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); line-height: 1.4;">${message}</div>
+            </div>
+            <button class="notification-close" style="width: 24px; height: 24px; background: transparent; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 6px; flex-shrink: 0;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        `;
+        
+        container.appendChild(notification);
+        
+        const colors = {
+            success: '#10b981',
+            error: '#ef4444',
+            warning: '#f59e0b',
+            info: '#3b82f6'
+        };
+        
+        const colorStrip = document.createElement('div');
+        colorStrip.style.cssText = `
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: ${colors[type] || colors.info};
+        `;
+        notification.appendChild(colorStrip);
+        
+        const closeBtn = notification.querySelector('.notification-close');
+        closeBtn.addEventListener('click', () => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            notification.style.transition = 'all 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        });
+        
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                notification.style.transition = 'all 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, duration);
+        
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+        notification.style.transition = 'all 0.3s ease-out';
+        
+        requestAnimationFrame(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateX(0)';
+        });
+    }
+    
+    // Dialer button clicks
+    dialerBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const digit = this.dataset.digit;
+            toNumberInput.value += digit;
+        });
+    });
+    
+    // Delete button
+    deleteBtn.addEventListener('click', function() {
+        toNumberInput.value = toNumberInput.value.slice(0, -1);
+    });
+    
+    // Call button
+    callBtn.addEventListener('click', function() {
+        const toNumber = toNumberInput.value;
+        const fromNumber = fromNumberSelect.value;
+        
+        if (!toNumber || !fromNumber) {
+            showNotification('warning', 'Missing Information', 'Please enter a phone number and select your number.');
+            return;
+        }
+        
+        callBtn.disabled = true;
+        callBtn.innerHTML = '<svg class="spinner" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2" fill="none"/></svg> Calling...';
+        
+        const formData = new FormData();
+        formData.append('from_number', fromNumber);
+        formData.append('to_number', toNumber);
+        
+        fetch('{% url "webdialer:voice_call" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const callId = data.call_id || 'N/A';
+                const cost = data.cost !== undefined ? '$' + data.cost.toFixed(2) : '$0.02';
+                showNotification('success', 'Call Initiated', `Call ID: ${callId}\nCost: ${cost}`);
+                toNumberInput.value = '';
+            } else {
+                showNotification('error', 'Call Failed', data.error || 'Failed to initiate call. Please try again.');
+            }
+        })
+        .catch(error => {
+            showNotification('error', 'Error', 'Error initiating call. Please try again.');
+        })
+        .finally(() => {
+            callBtn.disabled = false;
+            callBtn.innerHTML = '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Call';
+        });
+    });
+});
+</script>
+{% endblock %}

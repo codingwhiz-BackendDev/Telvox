@@ -1,0 +1,54 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Phone Dialer - SAMAPPTECH Dashboard{% endblock %}
+
+{% block content %}
+<div class="dialer-page">
+    <div class="dialer-page-header">
+        <h1>Phone Dialer</h1>
+    </div>
+    
+    <div class="phone-dialer dialer-full-page">
+        <div class="phone-dialer-header">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            <span>Quick Dial</span>
+        </div>
+        
+        <div class="phone-dialer-content">
+            <div class="dialer-display">
+                <input type="tel" id="dialerInput" class="dialer-input" placeholder="Enter number" />
+                <button id="dialerBackspace" class="dialer-backspace">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+                </button>
+            </div>
+            
+            <div class="dialer-keypad">
+                <button class="dialer-key" data-value="1">1</button>
+                <button class="dialer-key" data-value="2">2</button>
+                <button class="dialer-key" data-value="3">3</button>
+                <button class="dialer-key" data-value="4">4</button>
+                <button class="dialer-key" data-value="5">5</button>
+                <button class="dialer-key" data-value="6">6</button>
+                <button class="dialer-key" data-value="7">7</button>
+                <button class="dialer-key" data-value="8">8</button>
+                <button class="dialer-key" data-value="9">9</button>
+                <button class="dialer-key" data-value="*">*</button>
+                <button class="dialer-key" data-value="0">0</button>
+                <button class="dialer-key" data-value="#">#</button>
+            </div>
+            
+            <button id="dialerCallBtn" class="dialer-call-btn">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+                <span>Call</span>
+            </button>
+            
+            <div class="dialer-balance">
+                <span class="dialer-balance-label">Your Balance</span>
+                <span class="dialer-balance-amount">${{ user.userprofile.balance|floatformat:2 }}</span>
+            </div>
+            
+            <div class="dialer-status" id="dialerStatus"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

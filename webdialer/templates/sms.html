@@ -1,0 +1,68 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}SMS - SAMAPPTECH Dashboard{% endblock %}
+
+{% block content %}
+<div class="sms-container">
+    <div class="sms-sidebar">
+        <div class="sms-header">
+            <h2>Messages check</h2>
+            <div class="search-box">
+                <input type="text" id="messageSearch" placeholder="Search messages..." class="search-input">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+        </div>
+        {% if conversations %}
+            <div class="conversation-list">
+                {% for conv in conversations %}
+                    <div class="conversation-item {% if conv.id == active_conversation_id %}active{% endif %}" data-conversation-id="{{ conv.id }}">
+                        <div class="conv-number">{{ conv.contact_number }}</div>
+                        <div class="conv-preview">{{ conv.last_message|truncatewords:8 }}</div>
+                        <div class="conv-time">{{ conv.last_message_time|date:"H:i" }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                <p>No messages yet. You need an active number to send SMS.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="sms-main">
+        {% if active_conversation %}
+            <div class="chat-header">
+                <span class="chat-number">{{ active_conversation.contact_number }}</span>
+                <span class="chat-virtual-number">From: {{ active_virtual_number }}</span>
+            </div>
+            <div class="chat-messages">
+                {% for msg in messages %}
+                    <div class="message-bubble {% if msg.direction == 'inbound' %}inbound{% else %}outbound{% endif %}">
+                        <div class="message-content">{{ msg.message }}</div>
+                        <div class="message-time">{{ msg.created_at|date:"H:i" }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="compose-area">
+                <div class="virtual-number-pill">Sending from: {{ active_virtual_number }}</div>
+                <form class="compose-form" method="post" action="{% url 'webdialer:send_sms' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="to_number" value="{{ active_conversation.contact_number }}">
+                    <input type="hidden" name="from_number" value="{{ active_virtual_number }}">
+                    <textarea name="message" placeholder="Type your message..." rows="3" required></textarea>
+                    <button type="submit" class="send-btn">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Send
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <div class="empty-state-large">
+                <svg width="96" height="96" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 
+                <p>Choose a conversation from the left panel to view and send messages.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

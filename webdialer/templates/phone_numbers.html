@@ -1,0 +1,325 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load dashboard_filters %}
+
+{% block title %}Phone Numbers - SAMAPPTECH Dashboard{% endblock %}
+
+{% block content %}
+<div class="phone-numbers-container">
+    <div class="phone-numbers-header">
+        <h1>Your Phone Numbers</h1>
+        <a href="{% url 'webdialer:buy_phone_number' %}" class="btn-primary">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Buy a Number
+        </a>
+    </div>
+
+    {% if virtual_numbers %}
+        <div class="numbers-grid">
+            {% for number in virtual_numbers %}
+                <div class="number-card">
+                    <div class="number-flag">
+                        {% if number.country == 'US' %}
+                            <img src="{% static 'americaflag.jpg' %}" alt="United States">
+                        {% elif number.country == 'AU' %}
+                            <img src="{% static 'australiaflag.jpg' %}" alt="Australia">
+                        {% elif number.country == 'CA' %}
+                            <img src="{% static 'canadaflag.jpg' %}" alt="Canada">
+                        {% elif number.country == 'UK' %}
+                            <img src="{% static 'ukflag.jpg' %}" alt="United Kingdom">
+                        {% else %}
+                            <span>{{ number.country|country_flag }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="number-country">{{ number.country }}</div>
+                    <div class="number-phone">{{ number.phone_number }}</div>
+                    <span class="status-badge {% if number.status == 'active' %}status-active{% else %}status-suspended{% endif %}">{{ number.status|title }}</span>
+                    <div class="number-renewal">Renews: {{ number.renewal_date|date:"M d, Y" }}</div>
+                    <div class="number-actions">
+                        <button class="btn-manage">Manage</button>
+                        <button class="btn-cancel">Cancel</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <svg width="96" height="96" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <h3>No phone numbers yet</h3>
+            <p>Get a virtual number to start making calls and sending SMS.</p>
+            <a href="{% url 'webdialer:buy_phone_number' %}" class="btn-primary">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Buy a Number
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.phone-numbers-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.phone-numbers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.phone-numbers-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.number-card {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.number-card:nth-child(1) { animation-delay: 0.1s; }
+.number-card:nth-child(2) { animation-delay: 0.2s; }
+.number-card:nth-child(3) { animation-delay: 0.3s; }
+.number-card:nth-child(4) { animation-delay: 0.4s; }
+.number-card:nth-child(5) { animation-delay: 0.5s; }
+.number-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.number-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.number-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+    border-color: #667eea;
+}
+
+.number-card:hover::before {
+    opacity: 0.05;
+}
+
+.number-flag {
+    width: 60px;
+    height: 45px;
+    margin: 0 auto 16px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.number-flag img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.number-flag span {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.number-card:hover .number-flag {
+    transform: scale(1.1) rotate(3deg);
+}
+
+.number-country {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.number-phone {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.status-active {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.status-suspended {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.number-renewal {
+    font-size: 0.85rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.number-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-manage,
+.btn-cancel {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-manage {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-manage:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-cancel {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.btn-cancel:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.empty-state svg {
+    color: #cbd5e1;
+    margin-bottom: 24px;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.empty-state .btn-primary {
+    display: inline-flex;
+}
+</style>
+{% endblock %}

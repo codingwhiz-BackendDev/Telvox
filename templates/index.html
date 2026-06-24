@@ -1,0 +1,747 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SAMAPPTECH — Your Number, Anywhere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&family=Caveat:wght@600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation menu">
+  <button class="mobile-close" onclick="closeMob()" aria-label="Close menu">
+    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+  </button>
+  <nav aria-label="Mobile navigation">
+    <a href="#features" onclick="closeMob()">Features</a>
+    <a href="#pricing" onclick="closeMob()">Pricing</a>
+    <a href="#how" onclick="closeMob()">How It Works</a>
+    <a href="#download" onclick="closeMob()">App</a>
+    <a href="#faq" onclick="closeMob()">FAQ</a>
+    <a href="{% url 'register' %}" style="background:var(--grad-cta);color:#fff;padding:14px 36px;border-radius:50px;font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800" onclick="closeMob()" aria-label="Get started with SAMAPPTECH">Get Started</a>
+  </nav>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#" class="logo" aria-label="SAMAPPTECH Home">
+      <div class="logo-mark" aria-hidden="true">
+        <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+      </div>
+      <span class="logo-name">SAMAP<span>PTECH</span></span>
+    </a>
+    <ul class="nav-links" role="menubar">
+      <li role="none"><a href="#features" role="menuitem">Features</a></li>
+      <li role="none"><a href="#pricing" role="menuitem">Pricing</a></li>
+      <li role="none"><a href="#how" role="menuitem">How It Works</a></li>
+      <li role="none"><a href="#download" role="menuitem">App</a></li>
+      <li role="none"><a href="#faq" role="menuitem">FAQ</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="{% url 'login' %}" class="btn-ghost-nav">Sign In</a>
+      <a href="{% url 'register' %}" class="btn-cta-nav has-ripple" onclick="addRipple(event,this)" aria-label="Get a phone number">Get a Number</a>
+      <button class="hamburger" onclick="openMob()" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobileNav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero" aria-labelledby="hero-title">
+  <div class="hero-bg-zone" aria-hidden="true">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-bg-fade"></div>
+  </div>
+
+  <div class="hero-wrap">
+    <div class="hero-copy-panel">
+      <div class="hero-badge">
+        <div class="badge-dot">
+          <svg width="10" height="10" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span>Real numbers · Zero SIM · Instant activation</span>
+      </div>
+
+      <h1 class="hero-h1" id="hero-title">
+        <span class="hero-line">YOUR</span>
+        <span class="hero-line">NUMBER</span>
+        <span class="hero-line highlight">ANYWHERE</span>
+      </h1>
+
+      <div class="hero-sub">
+        <span class="country-pill">US</span>
+        <span class="country-pill">UK</span>
+        <span class="country-pill">Canada</span>
+        <span class="country-pill">Australia</span>
+      </div>
+
+      <p class="hero-desc">
+        Get a <strong>real local phone number</strong> from any country in under two minutes. Make HD calls, send SMS, keep your identity private — from <strong>$0.99/month.</strong>
+      </p>
+
+      <div class="hero-actions">
+        <a href="{% url 'register' %}" class="btn-hero-primary has-ripple" onclick="addRipple(event,this)" aria-label="Get your phone number now">
+          <span>Get Your Number</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#how" class="btn-hero-ghost" aria-label="Learn how SAMAPPTECH works">How it works</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="h-stat">
+          <span class="h-stat-val" data-count="150000">0</span>
+          <span class="h-stat-lbl">Active Numbers</span>
+        </div>
+        <div class="h-stat">
+          <span class="h-stat-val" data-count="50">0</span>
+          <span class="h-stat-lbl">Countries</span>
+        </div>
+        <div class="h-stat">
+          <span class="h-stat-val">$0.99</span>
+          <span class="h-stat-lbl">Starting Price</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-arrow">
+    <span>Scroll</span>
+    <div class="arrow-bounce">
+      <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ─── -->
+<section id="features">
+  <div class="container">
+    <div class="section-header reveal" style="margin-bottom:64px">
+      <div class="sec-tag"><div class="sec-tag-dot"></div><span class="sec-tag-text">Platform</span></div>
+      <h2 class="sec-h2">Built for <em>real</em><br>communication</h2>
+      <p class="sec-p">Everything you need to make calls, send messages, and manage your numbers — no SIM card required.</p>
+    </div>
+
+    <figure class="feat-image-banner reveal">
+      <img src="/static/manpressinglaptop.jpg" alt="SAMAPPTECH dashboard interface showing phone number management" class="feat-banner-img" loading="lazy">
+    </figure>
+
+    <!-- HD Voice — full width strip -->
+    <div class="feat-hd-full reveal d1">
+      <div class="feat-hd-inner">
+        <div class="feat-hd-left">
+          <div class="feat-icon-wrap blue">
+            <svg width="22" height="22" fill="none" stroke="var(--royal)" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <h3 class="feat-h3 feat-hd-title">HD Voice Calls</h3>
+          <p class="feat-p">Crystal-clear call quality on every connection. Our dedicated VoIP infrastructure delivers HD audio with zero perceptible lag, anywhere in the world.</p>
+          <div class="wave-vis feat-hd-wave">
+            <div class="w-bar" style="height:30%"></div>
+            <div class="w-bar" style="height:65%"></div>
+            <div class="w-bar" style="height:95%"></div>
+            <div class="w-bar" style="height:55%"></div>
+            <div class="w-bar" style="height:80%"></div>
+            <div class="w-bar" style="height:45%"></div>
+            <div class="w-bar" style="height:90%"></div>
+            <div class="w-bar" style="height:60%"></div>
+            <div class="w-bar" style="height:35%"></div>
+            <div class="w-bar" style="height:75%"></div>
+            <div class="w-bar" style="height:50%"></div>
+          </div>
+        </div>
+        <div class="feat-hd-right">
+          <p class="feat-hd-steps-label">Get started in minutes</p>
+          <div class="setup-steps setup-steps-grid">
+            <div class="setup-step"><div class="step-n">1</div><span class="step-txt">Sign up with your email</span><span class="step-tick">✓</span></div>
+            <div class="setup-step"><div class="step-n">2</div><span class="step-txt">Pick a country and number</span><span class="step-tick">✓</span></div>
+            <div class="setup-step"><div class="step-n">3</div><span class="step-txt">Pay securely via Stripe</span><span class="step-tick">✓</span></div>
+            <div class="setup-step setup-step-final"><div class="step-n">4</div><span class="step-txt">Go live — start calling now</span><span class="step-tick">→</span></div>
+          </div>
+        </div>
+        <span class="feat-num-bg">01</span>
+      </div>
+    </div>
+
+    <div class="feat-grid">
+
+      <!-- Feature 2: SMS -->
+      <article class="feat-card reveal d2">
+        <div class="feat-icon-wrap teal" aria-hidden="true">
+          <svg width="22" height="22" fill="none" stroke="var(--teal)" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3 class="feat-h3">Two-Way SMS</h3>
+        <p class="feat-p">Send and receive text messages worldwide. Incoming SMS always free. Outgoing from $0.10 per message with a full inbox per number.</p>
+        <span class="feat-num-bg" aria-hidden="true">02</span>
+      </article>
+
+      <!-- Feature 3: Privacy -->
+      <article class="feat-card reveal d3">
+        <div class="feat-icon-wrap gold" aria-hidden="true">
+          <svg width="22" height="22" fill="none" stroke="var(--gold)" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="feat-h3">Full Privacy</h3>
+        <p class="feat-p">Your real number stays hidden. Use SAMAPPTECH numbers for sign-ups, business contacts, and online activity without exposing personal details.</p>
+        <span class="feat-num-bg" aria-hidden="true">03</span>
+      </article>
+
+      <!-- Feature 4: Voicemail -->
+      <article class="feat-card reveal d1">
+        <div class="feat-icon-wrap coral" aria-hidden="true">
+          <svg width="22" height="22" fill="none" stroke="var(--coral)" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="5.5" cy="11.5" r="4.5"/><circle cx="18.5" cy="11.5" r="4.5"/><line x1="9" y1="16" x2="15" y2="16"/></svg>
+        </div>
+        <h3 class="feat-h3">Free Voicemail</h3>
+        <p class="feat-p">Every number includes built-in voicemail with instant notification and audio playback right inside your dashboard.</p>
+        <span class="feat-num-bg" aria-hidden="true">04</span>
+      </article>
+
+      <!-- Feature 5: Multi-number -->
+      <article class="feat-card reveal d2">
+        <div class="feat-icon-wrap sky" aria-hidden="true">
+          <svg width="22" height="22" fill="none" stroke="var(--sky)" stroke-width="1.75" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <h3 class="feat-h3">Many Numbers, One App</h3>
+        <p class="feat-p">Manage US, UK, Canada, and Australia numbers from a single dashboard. Switch between them instantly with no friction.</p>
+        <span class="feat-num-bg" aria-hidden="true">05</span>
+      </article>
+
+      <!-- Feature 6: Instant -->
+      <article class="feat-card reveal d3">
+        <div class="feat-icon-wrap blue" aria-hidden="true">
+          <svg width="22" height="22" fill="none" stroke="var(--royal)" stroke-width="1.75" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3 class="feat-h3">Instant Activation</h3>
+        <p class="feat-p">From sign-up to a live phone number in under 2 minutes. No paperwork, no contracts, no waiting periods — just go.</p>
+        <span class="feat-num-bg" aria-hidden="true">06</span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ─── -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-header sec-header-center reveal" style="margin-bottom:52px">
+      <div class="sec-tag"><div class="sec-tag-dot"></div><span class="sec-tag-text">Pricing</span></div>
+      <h2 class="sec-h2">Simple, <em>honest</em> pricing</h2>
+      <p class="sec-p">No contracts. No hidden fees. Pay monthly or save up to 37% annually.</p>
+    </div>
+
+    <div class="bill-toggle reveal">
+      <span class="bill-lbl on" id="lbl-mo">Monthly</span>
+      <div class="toggle-track" id="billToggle" onclick="toggleBilling()">
+        <div class="toggle-thumb"></div>
+      </div>
+      <span class="bill-lbl" id="lbl-yr">Annual</span>
+      <span class="save-badge">Save up to 37%</span>
+    </div>
+
+    <div class="pricing-grid reveal">
+
+      <!-- US -->
+      <article class="p-card">
+        <img src="/static/americaflag.jpg" alt="United States flag" class="p-flag-img" loading="lazy">
+        <div class="p-country">United States</div>
+        <div class="p-price-row">
+          <span class="p-sym">$</span>
+          <span class="p-amount" data-mo="0.99" data-yr="0.83">0.99</span>
+          <span class="p-per">/mo</span>
+        </div>
+        <div class="p-annual-note" id="note-us" aria-live="polite"></div>
+        <div class="p-setup">+ $0.99 one-time setup fee</div>
+        <div class="p-divider" aria-hidden="true"></div>
+        <ul class="p-features-list">
+          <li><div class="p-check" aria-hidden="true"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span>Free incoming calls & SMS</span></li>
+          <li><div class="p-check" aria-hidden="true"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span>Free voicemail included</span></li>
+          <li><div class="p-check" aria-hidden="true"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span>Instant activation</span></li>
+          <li><div class="p-check" aria-hidden="true"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span>Web dialer included</span></li>
+        </ul>
+        <a href="{% url 'register' %}" class="btn-p-outline has-ripple" onclick="addRipple(event,this)" aria-label="Get a United States phone number">Get US Number</a>
+      </article>
+
+      <!-- Canada -->
+      <div class="p-card">
+        <img src="/static/canadaflag.jpg" alt="Canada Flag" class="p-flag-img">
+        <div class="p-country">Canada</div>
+        <div class="p-price-row">
+          <span class="p-sym">$</span>
+          <span class="p-amount" data-mo="1.99" data-yr="1.25">1.99</span>
+          <span class="p-per">/mo</span>
+        </div>
+        <div class="p-annual-note" id="note-ca"></div>
+        <div class="p-setup">+ $0.99 one-time setup fee</div>
+        <div class="p-divider"></div>
+        <ul class="p-features-list">
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Free incoming calls & SMS</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Free voicemail included</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Instant activation</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Web dialer included</li>
+        </ul>
+        <a href="{% url 'register' %}" class="btn-p-outline has-ripple" onclick="addRipple(event,this)">Get Canada Number</a>
+      </div>
+
+      <!-- UK — Featured -->
+      <div class="p-card featured">
+        <span class="p-popular">Most Popular</span>
+        <img src="/static/ukflag.jpg" alt="UK Flag" class="p-flag-img">
+        <div class="p-country">United Kingdom</div>
+        <div class="p-price-row">
+          <span class="p-sym">$</span>
+          <span class="p-amount" data-mo="1.99" data-yr="1.25">1.99</span>
+          <span class="p-per">/mo</span>
+        </div>
+        <div class="p-annual-note" id="note-uk"></div>
+        <div class="p-setup">+ $0.99 one-time setup fee</div>
+        <div class="p-divider"></div>
+        <ul class="p-features-list">
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Free incoming calls & SMS</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Free voicemail included</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Instant activation</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Web dialer included</li>
+        </ul>
+        <a href="{% url 'register' %}" class="btn-p-solid has-ripple" onclick="addRipple(event,this)">
+          Get UK Number
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Australia -->
+      <div class="p-card">
+        <img src="/static/australiaflag.jpg" alt="Australia Flag" class="p-flag-img">
+        <div class="p-country">Australia</div>
+        <div class="p-price-row">
+          <span class="p-sym">$</span>
+          <span class="p-amount" data-mo="6.99" data-yr="4.99">6.99</span>
+          <span class="p-per">/mo</span>
+        </div>
+        <div class="p-annual-note" id="note-au"></div>
+        <div class="p-setup">+ $0.99 one-time setup fee</div>
+        <div class="p-divider"></div>
+        <ul class="p-features-list">
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Free incoming calls & SMS</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Free voicemail included</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Instant activation</li>
+          <li><div class="p-check"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Web dialer included</li>
+        </ul>
+        <a href="{% url 'register' %}" class="btn-p-outline has-ripple" onclick="addRipple(event,this)">Get AU Number</a>
+      </div>
+
+    </div>
+
+    <!-- VIP -->
+    <div class="vip-block reveal">
+      <div>
+        <h3 class="vip-h3">VIP Numbers</h3>
+        <p class="vip-p">Stand out with a memorable pattern number — ideal for business lines, advertising, and personal branding. One-time $9 upgrade.</p>
+        <div class="vip-chips">
+          <span class="vip-chip">From $9 one-time</span>
+          <span class="vip-chip">Memorable patterns</span>
+          <span class="vip-chip">All features included</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-end;position:relative;z-index:1">
+        <div class="vip-number-box">
+          <span class="num">+1 (800) 555-0000</span>
+          <span class="lbl">VIP Pattern Number</span>
+        </div>
+        <a href="#" class="btn-vip has-ripple" onclick="addRipple(event,this)">
+          Upgrade to VIP
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section id="how">
+  <div class="container">
+    <div class="how-layout">
+      <div class="reveal-left">
+        <div class="sec-tag"><div class="sec-tag-dot"></div><span class="sec-tag-text">Process</span></div>
+        <h2 class="sec-h2" style="margin-top:16px">Live in<br><em>2 minutes</em></h2>
+        <p class="sec-p" style="margin-top:16px">No technical knowledge needed. No paperwork. Just a clean, simple flow that takes less time than brewing coffee.</p>
+        <div class="steps-list">
+          <div class="how-step reveal d1">
+            <span class="step-num-big">01</span>
+            <div class="step-body">
+              <h3>Create Your Account</h3>
+              <p>Sign up with just your email. No credit card required at this stage. Your account is ready in 30 seconds flat.</p>
+              <span class="step-tag">Takes 30 seconds</span>
+            </div>
+          </div>
+          <div class="how-step reveal d2">
+            <span class="step-num-big">02</span>
+            <div class="step-body">
+              <h3>Choose a Number</h3>
+              <p>Browse real numbers from US, UK, Canada, or Australia. Filter by area code, pattern, or VIP status to find the perfect number.</p>
+              <span class="step-tag">50+ countries</span>
+            </div>
+          </div>
+          <div class="how-step reveal d3">
+            <span class="step-num-big">03</span>
+            <div class="step-body">
+              <h3>Secure Payment</h3>
+              <p>Pay via card through Stripe. Choose monthly or annual billing. Top up call credits from the dashboard at any time.</p>
+              <span class="step-tag">Stripe secured</span>
+            </div>
+          </div>
+          <div class="how-step reveal d4">
+            <span class="step-num-big">04</span>
+            <div class="step-body">
+              <h3>Start Calling</h3>
+              <p>Your number is live immediately. Call from browser or mobile app, receive from anywhere — one clean dashboard controls it all.</p>
+              <span class="step-tag">Active in 60 seconds</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialer mockup -->
+      <div class="reveal-right d2">
+        <div class="dialer-wrap">
+          <div class="d-bar">
+            <div class="d-dot" style="background:#ff5f57"></div>
+            <div class="d-dot" style="background:#ffbd2e"></div>
+            <div class="d-dot" style="background:#28c840"></div>
+            <div class="d-url-bar">app.telvox.com/dialer</div>
+          </div>
+          <div class="d-screen">
+            <div class="d-screen-num" id="d-num">+1 (555)</div>
+            <div class="d-screen-sub">US Number · Active</div>
+          </div>
+          <div class="d-keypad">
+            <div class="d-key" onclick="dPress('1')"><div class="dk-n">1</div><div class="dk-a"></div></div>
+            <div class="d-key" onclick="dPress('2')"><div class="dk-n">2</div><div class="dk-a">ABC</div></div>
+            <div class="d-key" onclick="dPress('3')"><div class="dk-n">3</div><div class="dk-a">DEF</div></div>
+            <div class="d-key" onclick="dPress('4')"><div class="dk-n">4</div><div class="dk-a">GHI</div></div>
+            <div class="d-key" onclick="dPress('5')"><div class="dk-n">5</div><div class="dk-a">JKL</div></div>
+            <div class="d-key" onclick="dPress('6')"><div class="dk-n">6</div><div class="dk-a">MNO</div></div>
+            <div class="d-key" onclick="dPress('7')"><div class="dk-n">7</div><div class="dk-a">PQRS</div></div>
+            <div class="d-key" onclick="dPress('8')"><div class="dk-n">8</div><div class="dk-a">TUV</div></div>
+            <div class="d-key" onclick="dPress('9')"><div class="dk-n">9</div><div class="dk-a">WXYZ</div></div>
+            <div class="d-key" onclick="dPress('*')"><div class="dk-n">*</div></div>
+            <div class="d-key" onclick="dPress('0')"><div class="dk-n">0</div><div class="dk-a">+</div></div>
+            <div class="d-key" onclick="dPress('#')"><div class="dk-n">#</div></div>
+          </div>
+          <div class="d-call-row">
+            <div></div>
+            <button class="d-call-btn" onclick="dCall(this)">
+              <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            </button>
+            <div class="d-del" onclick="dPress('⌫')">⌫</div>
+          </div>
+          <div class="d-recents-label">Recent Calls</div>
+          <div class="d-recent-item">
+            <div class="d-dir-icon dir-in"><svg width="10" height="10" fill="none" stroke="#06C7A0" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 3 18 9"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
+            <span class="d-r-num">+44 7911 234 567</span>
+            <span class="d-r-dur">3m 24s</span>
+          </div>
+          <div class="d-recent-item">
+            <div class="d-dir-icon dir-out"><svg width="10" height="10" fill="none" stroke="var(--royal)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 21 6 15"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
+            <span class="d-r-num">+1 416 555 0190</span>
+            <span class="d-r-dur">1m 07s</span>
+          </div>
+          <div class="d-recent-item">
+            <div class="d-dir-icon dir-in"><svg width="10" height="10" fill="none" stroke="#06C7A0" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 3 18 9"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
+            <span class="d-r-num">+61 2 9374 4000</span>
+            <span class="d-r-dur">8m 52s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-header sec-header-center reveal" style="margin-bottom:52px">
+      <div class="sec-tag"><div class="sec-tag-dot"></div><span class="sec-tag-text">Reviews</span></div>
+      <h2 class="sec-h2">Trusted by <em>thousands</em></h2>
+      <p class="sec-p">From freelancers to founders — people around the world rely on SAMAPPTECH every day.</p>
+    </div>
+
+    <!-- IMAGE PLACEHOLDERS: Trust / social proof photos -->
+    <div class="trust-image-strip reveal">
+      <div class="trust-img-ph">
+        <img src="/static/manpressinglaptop.jpg" alt="Customer Photo — Entrepreneur using app" class="trust-img">
+      </div>
+      <div class="trust-img-ph">
+        <img src="/static/manpressingphone.jpg" alt="App in Use — Mobile screenshot" class="trust-img">
+      </div>
+      <div class="trust-img-ph">
+        <img src="/static/worldmapconnect.jpg" alt="Global Connectivity — Concept image" class="trust-img">
+      </div>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi-card reveal d1">
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-quote">"I needed a US number for my Shopify store without being in the US. SAMAPPTECH sorted it in literally three minutes. My customers have no idea I'm based in Lagos."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--grad-cta)">AO</div>
+          <div><div class="testi-name">Adebayo Olawale</div><div class="testi-role">E-commerce Entrepreneur · Nigeria</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d2">
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-quote">"As a freelancer working with UK clients, having a local UK number increased my callback rate significantly. The call quality is genuinely impressive."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,var(--teal),var(--sky))">SJ</div>
+          <div><div class="testi-name">Sarah Johnson</div><div class="testi-role">Freelance Designer · United States</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d3">
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-quote">"The web dialer changed how I work. Business calls on the laptop, personal on my phone — same numbers. Everything syncs and nothing is missed."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,var(--royal),var(--royal-light))">MK</div>
+          <div><div class="testi-name">Marc Kowalski</div><div class="testi-role">Startup Founder · Germany</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d1">
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-quote">"I've tried four virtual number services. SAMAPPTECH is the only one where every SMS arrives and every call connects on the first attempt. Flawless."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,var(--gold),var(--gold-light))">RP</div>
+          <div><div class="testi-name">Rahul Patel</div><div class="testi-role">Tech Lead · India</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d2">
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-quote">"Privacy was my main concern. SAMAPPTECH solved that instantly. I never give out my real number and the price is basically nothing. Total lifesaver."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,var(--coral),#ff8b8e)">EL</div>
+          <div><div class="testi-name">Emma Larsson</div><div class="testi-role">Student · Sweden</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d3">
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-quote">"Our distributed team now has local numbers across three continents. No SIMs, no roaming. SAMAPPTECH saves us over $200 a month compared to before."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,var(--teal-dark),var(--teal))">TC</div>
+          <div><div class="testi-name">Tae-yang Cho</div><div class="testi-role">Operations Manager · South Korea</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DOWNLOAD ─── -->
+<section id="download">
+  <div class="container">
+    <div class="dl-grid">
+      <div class="reveal-left">
+        <div class="sec-tag" style="margin-bottom:20px"><div class="sec-tag-dot"></div><span class="sec-tag-text">Mobile App</span></div>
+        <h2 class="dl-h2">Take SAMAPPTECH<br><em>everywhere</em></h2>
+        <p class="dl-p">Your numbers, calls, and messages — in your pocket. Beautifully designed for iOS and Android with everything you need on the go.</p>
+        <div class="store-btns">
+          <a href="#" class="store-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div class="store-btn-text"><span class="small">Download on the</span><span class="big">App Store</span></div>
+          </a>
+          <a href="#" class="store-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><path d="M3.18 23.76c.34.19.74.2 1.1.03l12.56-6.44-2.86-2.88L3.18 23.76zM.71 1.15C.27 1.51 0 2.1 0 2.9v18.2c0 .8.27 1.39.71 1.75l.09.08 10.2-10.21v-.24L.8 1.07l-.09.08zM20.46 10.27l-2.79-1.6-3.15 3.15 3.15 3.14 2.81-1.61c.8-.46.8-1.62-.02-2.08zM4.28.21L16.84 6.65 14 9.49 3.18.27c.36-.18.77-.17 1.1-.06z"/></svg>
+            <div class="store-btn-text"><span class="small">Get it on</span><span class="big">Google Play</span></div>
+          </a>
+        </div>
+        <div class="dl-metrics">
+          <div class="dl-metric"><span class="val">4.8★</span><span class="lbl">App Store Rating</span></div>
+          <div class="dl-metric"><span class="val">100K+</span><span class="lbl">Downloads</span></div>
+          <div class="dl-metric"><span class="val">4.7★</span><span class="lbl">Play Store Rating</span></div>
+        </div>
+      </div>
+
+      <!-- Phone mockups + image placeholder -->
+      <div class="reveal-right d2">
+
+        <!-- IMAGE PLACEHOLDER: App store screenshots -->
+        <div style="margin-bottom:20px;border-radius:var(--radius-lg);overflow:hidden;border:2px dashed var(--border);height:100px;display:flex;align-items:center;justify-content:center;background:var(--bg2)">
+          <div class="img-placeholder" style="text-align:center;padding:16px">
+            <div class="label" style="color:var(--muted);font-size:.75rem;font-weight:700">📱 App Store Badge / QR Code Image — Place official Apple/Google badge or QR code here. 400×100px.</div>
+          </div>
+        </div>
+
+        <div class="phones-group">
+          <div class="ph">
+            <div class="ph-content">
+              <div class="ph-logo-txt">SAMAPPTECH</div>
+              <div class="ph-num-chip"><div class="ph-chip-country">🇺🇸 United States</div><div class="ph-chip-num">+1 555 012</div></div>
+              <div class="ph-num-chip" style="background:rgba(58,183,255,.12);border-color:rgba(58,183,255,.2)"><div class="ph-chip-country" style="color:rgba(58,183,255,.7)">🇬🇧 United Kingdom</div><div class="ph-chip-num">+44 7700</div></div>
+            </div>
+          </div>
+          <div class="ph">
+            <div class="ph-content">
+              <div class="ph-logo-txt">SAMAPPTECH</div>
+              <div class="ph-num-chip"><div class="ph-chip-country">🇺🇸 Active Number</div><div class="ph-chip-num">+1 (555) 012-3456</div></div>
+              <div class="ph-btns-row">
+                <div class="ph-action"><span class="ico">📞</span><span class="lbl">Call</span></div>
+                <div class="ph-action"><span class="ico">💬</span><span class="lbl">SMS</span></div>
+                <div class="ph-action"><span class="ico">📬</span><span class="lbl">Mail</span></div>
+              </div>
+              <div class="ph-msgs">
+                <div class="ph-msg in">Hey, is this your new number?</div>
+                <div class="ph-msg out">Yes! SAMAPPTECH is great 🎉</div>
+                <div class="ph-msg in">Crystal clear quality!</div>
+              </div>
+            </div>
+          </div>
+          <div class="ph">
+            <div class="ph-content">
+              <div class="ph-logo-txt">SAMAPPTECH</div>
+              <div class="ph-num-chip" style="background:rgba(6,199,160,.12);border-color:rgba(6,199,160,.2)"><div class="ph-chip-country" style="color:rgba(6,199,160,.7)">Recent Calls</div><div class="ph-chip-num">3 Incoming</div></div>
+              <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px">
+                <div style="display:flex;gap:6px;align-items:center;padding:6px;background:rgba(255,255,255,.07);border-radius:8px">
+                  <span style="font-size:.65rem">📞</span>
+                  <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:.7rem;color:#fff;font-weight:700">+44 7911</div><div style="font-size:.5rem;color:rgba(255,255,255,.4)">2 min ago</div></div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;padding:6px;background:rgba(255,255,255,.07);border-radius:8px">
+                  <span style="font-size:.65rem">📱</span>
+                  <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:.7rem;color:#fff;font-weight:700">+1 416</div><div style="font-size:.5rem;color:rgba(255,255,255,.4)">8 min ago</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section id="faq">
+  <div class="container">
+    <div class="section-header sec-header-center reveal" style="margin-bottom:64px;position:relative;z-index:2">
+      <div class="sec-tag"><div class="sec-tag-dot"></div><span class="sec-tag-text">FAQ</span></div>
+      <h2 class="sec-h2">Questions <em>answered</em></h2>
+    </div>
+    <div class="faq-list" style="position:relative;z-index:2">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">What is SAMAPPTECH and how does it work? <div class="faq-toggle"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-answer">SAMAPPTECH is a virtual phone number service powered by Twilio's VoIP network. You get a real phone number from US, UK, Canada, Australia and more — without a physical SIM. Use it to make and receive calls and SMS via our web or mobile app from anywhere in the world.</div>
+      </div>
+      <div class="faq-item reveal d1">
+        <div class="faq-q" onclick="toggleFaq(this)">Do I need a SIM card or special hardware? <div class="faq-toggle"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-answer">No SIM card, no hardware, no browser extension required. All you need is an internet connection. Use our browser-based web dialer on desktop or download the iOS/Android app for mobile.</div>
+      </div>
+      <div class="faq-item reveal d2">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I use SAMAPPTECH numbers for app verifications? <div class="faq-toggle"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-answer">Yes — SAMAPPTECH numbers work for SMS verifications on most major platforms including WhatsApp, Telegram, Google, and Twitter/X. These are real numbers provisioned through Twilio, not recycled disposable numbers.</div>
+      </div>
+      <div class="faq-item reveal d3">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I use SAMAPPTECH from anywhere in the world? <div class="faq-toggle"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-answer">Absolutely. Whether you're in Nigeria, India, Brazil, Japan, or anywhere else — as long as you have an internet connection, you can make and receive calls using your virtual number. That's the whole point.</div>
+      </div>
+      <div class="faq-item reveal d4">
+        <div class="faq-q" onclick="toggleFaq(this)">What happens if I run out of credits? <div class="faq-toggle"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-answer">Incoming calls and SMS are always free. Credits are only used for outgoing calls and SMS. If your balance hits zero, top up instantly from the billing dashboard. Your number stays active as long as your subscription is paid.</div>
+      </div>
+      <div class="faq-item reveal d5">
+        <div class="faq-q" onclick="toggleFaq(this)">Is there a cancellation fee? <div class="faq-toggle"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-answer">None whatsoever. Cancel anytime from your dashboard — no forms, no calls, no fees. Your number remains active until the end of your billing period.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section id="cta">
+  <div class="cta-bg-word">TELVOX</div>
+  <div class="cta-inner reveal">
+    <div class="sec-tag" style="margin:0 auto 20px"><div class="sec-tag-dot"></div><span class="sec-tag-text">Get Started</span></div>
+    <h2 class="cta-h2">Your number<br>is <em>waiting</em></h2>
+    <p class="cta-p">Join 150,000+ people who use SAMAPPTECH for clear, private, global communication. Active in under 2 minutes — no credit card required.</p>
+    <div class="cta-btns">
+      <a href="{% url 'register' %}" class="btn-cta-main has-ripple" onclick="addRipple(event,this)">
+        Get Your Number — from $0.99
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#how" class="btn-cta-outline">See How It Works</a>
+    </div>
+    <div class="cta-checks">
+      <span class="cta-check-item"><div class="check-mark"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>No credit card required</span>
+      <span class="cta-check-item"><div class="check-mark"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Cancel anytime</span>
+      <span class="cta-check-item"><div class="check-mark"><svg width="9" height="9" fill="none" stroke="#06C7A0" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Live in under 2 minutes</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="#" class="logo">
+        <div class="logo-mark">
+          <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 2h3a2 2 0 012 1.72 12 12 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12 12 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <span class="logo-name" style="color:#fff">Tel<span style="color:var(--sky)">vox</span></span>
+      </a>
+      <p class="footer-brand-p">Virtual phone numbers for clear, private, global communication. US, UK, Canada & Australia from $0.99/month.</p>
+      <div class="socials">
+        <a href="#" class="social-link"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+        <a href="#" class="social-link"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+        <a href="#" class="social-link"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" class="social-link"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-h">Numbers</div>
+      <ul>
+        <li><a href="#">US Virtual Number</a></li>
+        <li><a href="#">UK Virtual Number</a></li>
+        <li><a href="#">Canada Number</a></li>
+        <li><a href="#">Australia Number</a></li>
+        <li><a href="#">All Countries</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-h">Product</div>
+      <ul>
+        <li><a href="#">Web Dialer</a></li>
+        <li><a href="#">Mobile App</a></li>
+        <li><a href="#">VIP Numbers</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Credits</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-h">Support</div>
+      <ul>
+        <li><a href="#">Help Centre</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Status</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-h">Company</div>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">GDPR</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SAMAPPTECH. All rights reserved. Powered by Twilio & Stripe.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>
