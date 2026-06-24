@@ -1,7 +1,12 @@
 from django.urls import path
+from django.http import HttpResponse
 from . import views
 
+def health(request):
+    return HttpResponse("ok")
+
 urlpatterns = [
+    path('health/', health),
     path('', views.index, name='index'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
